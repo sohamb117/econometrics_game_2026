@@ -1,0 +1,826 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table_11_Mid.log
+  log type:  text
+ opened on:   1 Jun 2011, 14:15:37
+
+. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests\";
+C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests
+
+. set more off;
+
+. set mem 400m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. set matsize 500;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. ******************************************************************************************************************
+> ;
+. **Closed School data;
+. ******************************************************************************************************************
+> ;
+. use "Closed School.dta";
+
+. gen close=1 if mon10=="Closed" &  mon11=="Closed";
+(105 missing values generated)
+
+. gen schid=idnum;
+
+. keep schid close;
+
+. sort schid;
+
+. save Temp\tempclose, replace;
+file Temp\tempclose.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **PRE_TEST DATA;
+. ******************************************************************************************************************
+> ;
+. *PRETEST VERBAL;
+. use Baseline\pre_verbal;
+
+. rename total_1_to_4 pre_math_v;
+
+. rename total_5_to_11 pre_lang_v;
+
+. rename total pre_total_v;
+
+. gen pre_writ=0;
+
+. keep schid childno pre_math_v pre_lang_v pre_total_v pre_writ;
+
+. save Temp\temp1, replace;
+file Temp\temp1.dta saved
+
+. clear;
+
+. *PRETEST WRIT;
+. use Baseline\pre_written;
+
+. rename total_1_to_4 pre_math_w;
+
+. rename total_5_to_11 pre_lang_w;
+
+. rename total pre_total_w;
+
+. gen pre_writ=1;
+
+. keep schid childno pre_math_w pre_lang_w pre_total_w pre_writ;
+
+. save Temp\temp2, replace;
+file Temp\temp2.dta saved
+
+. clear;
+
+. *STACK PRETEST;
+. use Temp\temp1;
+
+. append using Temp\temp2;
+
+. sort schid childno;
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. clear;
+
+. ******************************************************************************************************************
+> ;
+. **MID TEST DATA;
+. ******************************************************************************************************************
+> ;
+. use Midline\mid_verbal;
+
+. rename tot_1_to_4 mid_math_v;
+
+. rename tot_5_to_11 mid_lang_v;
+
+. rename total mid_total_v;
+
+. keep schid childno mid_math_v mid_lang_v mid_total_v;
+
+. replace schid=2492 if schid==2493;
+(4 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp3, replace;
+file Temp\temp3.dta saved
+
+. clear;
+
+. *MIDTEST WRIT;
+. use Midline\mid_written;
+
+. rename total_1_to_5 mid_math_w;
+
+. rename total_6_to_16 mid_lang_w;
+
+. rename total mid_total_w;
+
+. gen mid_writ=1;
+
+. keep schid childno mid_math_w mid_lang_w mid_total_w mid_writ;
+
+. replace schid=2492 if schid==2493;
+(2 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp4, replace;
+file Temp\temp4.dta saved
+
+. clear;
+
+. *MERGE POST TEST;
+. use Temp\temp3;
+
+. sort schid childno;
+
+. merge schid childno using Temp\temp4;
+
+. drop _merge;
+
+. ******************************************************************************************************************
+> ;
+. **MERGING PRE AND MID TEST;
+. ******************************************************************************************************************
+> ;
+. sort schid childno;
+
+. merge schid childno using Temp\testdata;
+variables schid childno do not uniquely identify observations in Temp\testdata.dta
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. **FIXING MISTAKES IN THE DATA;
+. replace pre_math_w=56 if schid==4231 & childno==3;
+(1 real change made)
+
+. replace pre_total_v=11 if schid==3511 & childno==17;
+(1 real change made)
+
+. replace pre_total_w=34 if schid==4252 & childno==22;
+(1 real change made)
+
+. gen block = int(schid/1000);
+
+. *MERGING IN TREATMENT STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using treatschool;
+variable schid does not uniquely identify observations in the master data
+
+. gen treat = 0;
+
+. replace treat = 1 if _merge == 3;
+(1546 real changes made)
+
+. **RECODING VARIABLES;
+. for var _all: replace X = . if X == -999;
+
+->  replace schid = . if schid == -999
+(0 real changes made)
+
+->  replace childno = . if childno == -999
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -999
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -999
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -999
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -999
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -999
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -999
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -999
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -999
+(96 real changes made, 96 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -999
+(99 real changes made, 99 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -999
+(196 real changes made, 196 to missing)
+
+->  replace pre_writ = . if pre_writ == -999
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -999
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -999
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -999
+(1 real change made, 1 to missing)
+
+->  replace block = . if block == -999
+(0 real changes made)
+
+->  replace _merge = . if _merge == -999
+(0 real changes made)
+
+->  replace treat = . if treat == -999
+(0 real changes made)
+
+. for var _all: replace X = . if X == -888;
+
+->  replace schid = . if schid == -888
+(0 real changes made)
+
+->  replace childno = . if childno == -888
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -888
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -888
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -888
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -888
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -888
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -888
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -888
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_writ = . if pre_writ == -888
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -888
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -888
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -888
+(0 real changes made)
+
+->  replace block = . if block == -888
+(0 real changes made)
+
+->  replace _merge = . if _merge == -888
+(0 real changes made)
+
+->  replace treat = . if treat == -888
+(0 real changes made)
+
+. for var _all: replace X = . if X == -777;
+
+->  replace schid = . if schid == -777
+(0 real changes made)
+
+->  replace childno = . if childno == -777
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -777
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -777
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -777
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -777
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -777
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -777
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -777
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_writ = . if pre_writ == -777
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -777
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -777
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -777
+(0 real changes made)
+
+->  replace block = . if block == -777
+(0 real changes made)
+
+->  replace _merge = . if _merge == -777
+(0 real changes made)
+
+->  replace treat = . if treat == -777
+(0 real changes made)
+
+. **MERGING IN CLOSURE STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using Temp\tempclose;
+variable schid does not uniquely identify observations in the master data
+
+. drop if treat==.;
+(5 observations deleted)
+
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **SOME SAMPLE STATS;
+. ******************************************************************************************************************
+> ;
+. **CALC SCORES BY SCHID AND LOOKING AT CLOSURES;
+. sort schid close treat;
+
+. collapse (mean) pre_math_v pre_lang_v pre_total_v pre_math_w pre_lang_w pre_total_w 
+> mid_math_v mid_lang_v mid_total_v mid_math_w mid_lang_w mid_total_w, by(schid close treat);
+
+. clear;
+
+. **STUDENT LEVEL DATA;
+. use Temp\test_new.dta;
+
+. **DROPING SCHOOLS WITH NO PRE OR POST DATA THAT WERE BASICALLY NEVER OPEN;
+. drop if schid==1211;
+(1 observation deleted)
+
+. drop if schid==5332;
+(1 observation deleted)
+
+. drop if schid==5711;
+(1 observation deleted)
+
+. drop if schid==1111;
+(0 observations deleted)
+
+. drop if schid==2111;
+(0 observations deleted)
+
+. drop if schid==5221;
+(0 observations deleted)
+
+. drop if schid==5611;
+(0 observations deleted)
+
+. drop if schid==1113;
+(11 observations deleted)
+
+. drop if schid==5731 & childno==24;
+(2 observations deleted)
+
+. **drop if close==1;
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. *LOOKING AT ENTRY AND EXIT;
+. gen entry=0;
+
+. replace entry=1 if (pre_total_v==. & pre_total_w==.) & mid_total_v!=. ;
+(760 real changes made)
+
+. gen missing=0;
+
+. replace missing=1 if (pre_total_v!=. | pre_total_w!=.) & mid_total_v==. ;
+(371 real changes made)
+
+. gen stayer=0;
+
+. replace stayer=1 if missing==0 & entry==0;
+(1893 real changes made)
+
+. tab entry;
+
+      entry |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,264       74.87       74.87
+          1 |        760       25.13      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. tab missing;
+
+    missing |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,653       87.73       87.73
+          1 |        371       12.27      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. tab stayer;
+
+     stayer |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,131       37.40       37.40
+          1 |      1,893       62.60      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. **drop if close==1;
+. save Temp\test_new, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **ADDING SCORES;
+. ******************************************************************************************************************
+> ;
+. drop if stayer==0;
+(1131 observations deleted)
+
+. replace pre_math_w=pre_math_w/5;
+(343 real changes made)
+
+. replace pre_lang_w=pre_lang_w/5;
+(336 real changes made)
+
+. replace pre_total_w=pre_total_w/5;
+(343 real changes made)
+
+. replace mid_math_w=mid_math_w/5;
+(659 real changes made)
+
+. replace mid_lang_w=mid_lang_w/5;
+(652 real changes made)
+
+. replace mid_total_w=mid_total_w/5;
+(661 real changes made)
+
+. replace pre_math_v=0 if pre_math_v==.;
+(378 real changes made)
+
+. replace pre_lang_v=0 if pre_lang_v==.;
+(455 real changes made)
+
+. replace pre_total_v=0 if pre_total_v==.;
+(377 real changes made)
+
+. replace pre_math_w=0 if pre_math_w==.;
+(1550 real changes made)
+
+. replace pre_lang_w=0 if pre_lang_w==.;
+(1551 real changes made)
+
+. replace pre_total_w=0 if pre_total_w==.;
+(1550 real changes made)
+
+. replace mid_math_v=0 if mid_math_v==.;
+(34 real changes made)
+
+. replace mid_lang_v=0 if mid_lang_v==.;
+(34 real changes made)
+
+. replace mid_total_v=0 if mid_total_v==.;
+(34 real changes made)
+
+. replace mid_math_w=0 if mid_math_w==.;
+(1232 real changes made)
+
+. replace mid_lang_w=0 if mid_lang_w==.;
+(1232 real changes made)
+
+. replace mid_total_w=0 if mid_total_w==.;
+(1232 real changes made)
+
+. gen add_mid_math=mid_math_v+mid_math_w;
+
+. gen add_mid_lang=mid_lang_v+mid_lang_w;
+
+. gen add_mid_total=mid_total_v+mid_total_w;
+
+. ******************************************************************************************************************
+> ;
+. **Normalized scores (PANEL A & B & C);
+. ******************************************************************************************************************
+> ;
+. program define zscore;
+  1.         syntax, option1(string);
+  2. sort treat;
+  3. egen m1_`option1'=mean(`option1') if treat==0;
+  4. egen sd1_`option1'=sd(`option1') if treat==0;
+  5. egen m_`option1'=mean(m1_`option1');
+  6. egen sd_`option1'=mean(sd1_`option1');
+  7. gen z_`option1'=(`option1'-m_`option1')/sd_`option1';
+  8. end;
+
+. zscore, option1(add_mid_math);
+(1015 missing values generated)
+(1015 missing values generated)
+
+. zscore, option1(add_mid_lang);
+(1015 missing values generated)
+(1015 missing values generated)
+
+. zscore, option1(add_mid_total);
+(1015 missing values generated)
+(1015 missing values generated)
+
+. replace mid_writ=0 if mid_writ==.;
+(1232 real changes made)
+
+. ******************************************************************************************************************
+> ;
+. **ADDING PAYMENT DATA AND AVERAGE CHECK DATA!;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests\Baseline\av_random";
+variable schid does not uniquely identify observations in the master data
+
+. drop _merge;
+
+. sort schid;
+
+. merge schid using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests\Baseline\av_payments";
+variable schid does not uniquely identify observations in the master data
+
+. drop if stayer==.;
+(3 observations deleted)
+
+. replace payment=1000 if treat==0;
+(878 real changes made)
+
+. **COL 1;
+. regress mid_writ open pre_math_v pre_math_w pre_writ if treat==0, cluster(schid);
+
+Linear regression                                      Number of obs =     878
+                                                       F(  4,    55) =  161.46
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.3480
+                                                       Root MSE      =  .38151
+
+                                 (Std. Err. adjusted for 56 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+    mid_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .0152989   .1012155     0.15   0.880    -.1875416    .2181394
+  pre_math_v |   .0279542   .0047353     5.90   0.000     .0184645    .0374438
+  pre_math_w |   .0216449   .0102952     2.10   0.040      .001013    .0422769
+    pre_writ |   .7151104   .0959454     7.45   0.000     .5228316    .9073893
+       _cons |  -.0243333   .0699413    -0.35   0.729    -.1644987    .1158322
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket replace;
+
+. regress z_add_mid_total open pre_total_v pre_total_w pre_writ if treat==0, cluster(schid);
+
+Linear regression                                      Number of obs =     878
+                                                       F(  4,    55) =  101.00
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5313
+                                                       Root MSE      =  .68621
+
+                                 (Std. Err. adjusted for 56 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .1972011   .1864703     1.06   0.295    -.1764938     .570896
+ pre_total_v |   .0609768   .0162031     3.76   0.000      .028505    .0934486
+ pre_total_w |   .0784844   .0124465     6.31   0.000      .053541    .1034277
+    pre_writ |   1.291315   .2451356     5.27   0.000     .8000519    1.782577
+       _cons |   -1.11836   .1547027    -7.23   0.000    -1.428391   -.8083291
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. **COL 2;
+. regress mid_writ open pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =    1015
+                                                       F(  4,    56) =  527.08
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.4531
+                                                       Root MSE      =  .35661
+
+                                 (Std. Err. adjusted for 57 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+    mid_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .2773233   .0810476     3.42   0.001     .1149655    .4396812
+ pre_total_v |    .032675   .0028307    11.54   0.000     .0270044    .0383456
+ pre_total_w |   .0082834   .0054889     1.51   0.137    -.0027122    .0192789
+    pre_writ |   .9511437   .0829203    11.47   0.000     .7850343    1.117253
+       _cons |  -.3561554   .0680381    -5.23   0.000    -.4924522   -.2198586
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. regress z_add_mid_total open pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =    1015
+                                                       F(  4,    56) =  211.11
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.6103
+                                                       Root MSE      =  .65898
+
+                                 (Std. Err. adjusted for 57 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .3934054    .217166     1.81   0.075    -.0416304    .8284412
+ pre_total_v |   .0940739   .0054035    17.41   0.000     .0832494    .1048984
+ pre_total_w |   .0502038   .0157132     3.19   0.002     .0187263    .0816812
+    pre_writ |   2.083981   .2256516     9.24   0.000     1.631946    2.536015
+       _cons |  -1.532578   .1769383    -8.66   0.000    -1.887028   -1.178128
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. **COL 4;
+. ivreg mid_writ (open=treat) pre_math_v pre_math_w pre_writ, cluster(schid);
+
+Instrumental variables (2SLS) regression               Number of obs =    1893
+                                                       F(  4,   112) =  498.04
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.3499
+                                                       Root MSE      =  .38488
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+    mid_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .2615756   .1855514     1.41   0.161    -.1060707    .6292218
+  pre_math_v |   .0314559   .0030353    10.36   0.000     .0254418      .03747
+  pre_math_w |   .0217263   .0071232     3.05   0.003     .0076126    .0358401
+    pre_writ |   .7390268   .0715665    10.33   0.000     .5972271    .8808266
+       _cons |  -.2187099   .1395699    -1.57   0.120    -.4952498      .05783
+------------------------------------------------------------------------------
+Instrumented:  open
+Instruments:   pre_math_v pre_math_w pre_writ treat
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. ivreg z_add_mid_total (open=treat) pre_total_v pre_total_w pre_writ, cluster(schid);
+
+Instrumental variables (2SLS) regression               Number of obs =    1893
+                                                       F(  4,   112) =  223.87
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5454
+                                                       Root MSE      =  .69601
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   1.066711   .4333449     2.46   0.015     .2080934    1.925328
+ pre_total_v |   .0765229   .0101864     7.51   0.000     .0563399    .0967059
+ pre_total_w |   .0669921   .0104081     6.44   0.000     .0463698    .0876144
+    pre_writ |   1.615689   .1754011     9.21   0.000     1.268154    1.963224
+       _cons |  -1.890034   .3576093    -5.29   0.000    -2.598591   -1.181477
+------------------------------------------------------------------------------
+Instrumented:  open
+Instruments:   pre_total_v pre_total_w pre_writ treat
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. **COL 3;
+. replace payment=0 if treat==0;
+(878 real changes made)
+
+. gen treat_pay=treat*payment;
+
+. gen days=pay/50;
+
+. replace days=days/27;
+(1015 real changes made)
+
+. regress mid_writ days pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =    1015
+                                                       F(  4,    56) =  474.27
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.4535
+                                                       Root MSE      =  .35649
+
+                                 (Std. Err. adjusted for 57 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+    mid_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        days |   .3558887   .1050429     3.39   0.001     .1454625    .5663149
+ pre_total_v |   .0322407   .0027853    11.58   0.000     .0266611    .0378203
+ pre_total_w |   .0062008   .0045088     1.38   0.175    -.0028315    .0152331
+    pre_writ |   .9683168   .0728009    13.30   0.000     .8224791    1.114154
+       _cons |  -.3834473   .0841976    -4.55   0.000    -.5521154   -.2147793
+------------------------------------------------------------------------------
+
+. outreg days using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. regress z_add_mid_total days pre_total_v pre_total_w if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =    1015
+                                                       F(  3,    56) =  179.96
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5532
+                                                       Root MSE      =  .70526
+
+                                 (Std. Err. adjusted for 57 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        days |   .8666408    .221766     3.91   0.000     .4223901    1.310891
+ pre_total_v |   .0798688   .0057484    13.89   0.000     .0683535    .0913842
+ pre_total_w |   .1842648   .0080757    22.82   0.000     .1680871    .2004425
+       _cons |  -1.643825   .1698586    -9.68   0.000    -1.984093   -1.303557
+------------------------------------------------------------------------------
+
+. outreg days using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_mid.csv", bdec(2) nocons se 3aster rd
+> ec(2) comma bracket append;
+
+. 
+end of do-file
+
+. do "C:\Incentives_Matter_Data\Incentives_FINAL\Programs\Table 11 Post.do"
+
+. clear 
+
+. 
+. *SETTING ENVIRONMENT;
+. #delimit;
+delimiter now ;
+. capture log close;

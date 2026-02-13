@@ -1,0 +1,10 @@
+This zip file contains two folders.
+
+The first one, Incentives_FINAL, should be placed in a folder called:
+C:\Incentives_Matter_Data
+This folder contains the data and programs for the analysis of the randomized experiment.
+
+The second one, Structural Programs, contains all data and programs to estimate the structural model.
+
+Directions on the structure and use of both files are included within.
+

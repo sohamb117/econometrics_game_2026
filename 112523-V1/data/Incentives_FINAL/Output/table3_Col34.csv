@@ -1,0 +1,15 @@
+,(1),(2)
+,worked,
+first4,0.46,0.39
+,[0.04]***,[0.03]***
+inthemoney,0.60,0.48
+,[0.03]***,[0.01]***
+first4_inthemoney,-0.34,-0.30
+,[0.04]***,[0.02]***
+Constant,-0.02,-0.16
+,[0.03],[0.07]**
+Observations,27501,27501
+R-squared,0.08,0.16
+* significant at 10%; ** significant at 5%; *** significant at 1%,,
+Standard errors in brackets,,
+Robust standard errors in brackets,,

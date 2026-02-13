@@ -1,0 +1,8 @@
+,(1),(2),(3)
+,z_add_mid_math,,
+treat,0.14,0.13,0.15
+,[0.08]*,[0.06]**,[0.07]**
+Observations,1550,1550,1550
+R-squared,0.19,0.42,0.35
+Robust standard errors in brackets,,,
+* significant at 10%; ** significant at 5%; *** significant at 1%,,,

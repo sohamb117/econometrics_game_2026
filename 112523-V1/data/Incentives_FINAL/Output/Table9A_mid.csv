@@ -1,0 +1,8 @@
+,(1),(2),(3),(4)
+,mid_writ,,,
+treat,0.04,0.15,0.16,0.17
+,[0.03],[0.07]**,[0.06]***,[0.06]***
+Observations,1893,1893,1893,1893
+R-squared,0.35,0.44,0.60,0.56
+Robust standard errors in brackets,,,,
+* significant at 10%; ** significant at 5%; *** significant at 1%,,,,

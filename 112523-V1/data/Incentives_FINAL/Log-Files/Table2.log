@@ -1,0 +1,507 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table2.log
+  log type:  text
+ opened on:   1 Jun 2011, 14:13:31
+
+. set more off;
+
+. set mem 300m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          300M    max. data space                300.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               303.858M
+
+. set matsize 150;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          300M    max. data space                300.000M
+    set matsize         150     max. RHS vars in models          0.184M
+                                                            -----------
+                                                               302.093M
+
+. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\";
+C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance
+
+. use "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\randomcheck.dta";
+
+. **************************************************************************************************;
+. **CREATING DATA FOR CHARTS;
+. **************************************************************************************************;
+. **ALL SCHOOLS;
+. **QUICKLY RECODING DATES;
+. gen time=1 if month==8 & year==2003;
+(3066 missing values generated)
+
+. replace time=2 if month==9 & year==2003;
+(98 real changes made)
+
+. replace time=3 if month==10 & year==2003;
+(95 real changes made)
+
+. replace time=4 if month==11 & year==2003;
+(147 real changes made)
+
+. replace time=5 if month==12 & year==2003;
+(110 real changes made)
+
+. replace time=6 if month==1 & year==2004;
+(111 real changes made)
+
+. replace time=7 if month==2 & year==2004;
+(111 real changes made)
+
+. replace time=8 if month==3 & year==2004;
+(112 real changes made)
+
+. replace time=9 if month==4 & year==2004;
+(107 real changes made)
+
+. replace time=10 if month==5 & year==2004;
+(104 real changes made)
+
+. replace time=11 if month==6 & year==2004;
+(104 real changes made)
+
+. replace time=12 if month==7 & year==2004;
+(106 real changes made)
+
+. replace time=13 if month==8 & year==2004;
+(91 real changes made)
+
+. replace time=14 if month==9 & year==2004;
+(99 real changes made)
+
+. replace time=15 if month==10 & year==2004;
+(96 real changes made)
+
+. replace time=16 if month==11 & year==2004;
+(87 real changes made)
+
+. replace time=17 if month==12 & year==2004;
+(131 real changes made)
+
+. replace time=18 if month==1 & year==2005;
+(104 real changes made)
+
+. replace time=19 if month==2 & year==2005;
+(104 real changes made)
+
+. replace time=20 if month==3 & year==2005;
+(103 real changes made)
+
+. replace time=21 if month==4 & year==2005;
+(104 real changes made)
+
+. replace time=22 if month==5 & year==2005;
+(107 real changes made)
+
+. replace time=23 if month==6 & year==2005;
+(99 real changes made)
+
+. replace time=24 if month==7 & year==2005;
+(100 real changes made)
+
+. replace time=25 if month==8 & year==2005;
+(96 real changes made)
+
+. replace time=26 if month==9 & year==2005;
+(98 real changes made)
+
+. replace time=27 if month==10 & year==2005;
+(97 real changes made)
+
+. replace time=28 if month==11 & year==2005;
+(84 real changes made)
+
+. replace time=29 if month==12 & year==2005;
+(98 real changes made)
+
+. replace time=30 if month==1 & year==2006;
+(94 real changes made)
+
+. replace time=31 if month==2 & year==2006;
+(67 real changes made)
+
+. **ALLOCATING AUGUST 25th schools to September;
+. replace time=2 if month==8 & day>24;
+(104 real changes made)
+
+. drop if schid==1111;
+(1 observation deleted)
+
+. drop if schid==1211;
+(1 observation deleted)
+
+. drop if schid==2493;
+(24 observations deleted)
+
+. drop if schid==5221;
+(2 observations deleted)
+
+. drop if schid==5231;
+(1 observation deleted)
+
+. drop if schid==5332;
+(2 observations deleted)
+
+. drop if schid==5711;
+(1 observation deleted)
+
+. gen RC=1;
+
+. sort schid;
+
+. save randomcheck_CODED, replace;
+file randomcheck_CODED.dta saved
+
+. **************************************************************************************************************;
+. drop if time==1;
+(80 observations deleted)
+
+. sum open if treat==0;
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |      1496    .5795455     .493797          0          1
+
+. sum open if treat==1;
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |      1575    .7866667    .4097912          0          1
+
+. regress open treat, cluster(schid);
+
+Linear regression                                      Number of obs =    3071
+                                                       F(  1,   112) =   49.01
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0497
+                                                       Root MSE      =  .45266
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .2071212    .029586     7.00   0.000     .1485003    .2657422
+       _cons |   .5795455   .0226667    25.57   0.000     .5346344    .6244565
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket replace;
+
+. regress open treat if time<9, cluster(schid);
+
+Linear regression                                      Number of obs =     882
+                                                       F(  1,   112) =   29.28
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0486
+                                                       Root MSE      =  .43401
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |    .196051   .0362311     5.41   0.000     .1242638    .2678382
+       _cons |   .6312217   .0289804    21.78   0.000     .5738008    .6886427
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time>8 & time<16, cluster(schid);
+
+Linear regression                                      Number of obs =     660
+                                                       F(  1,   108) =   19.07
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0371
+                                                       Root MSE      =   .4377
+
+                                (Std. Err. adjusted for 109 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1715767     .03929     4.37   0.000     .0936972    .2494563
+       _cons |   .6383648   .0295243    21.62   0.000     .5798424    .6968871
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time>15, cluster(schid);
+
+Linear regression                                      Number of obs =    1529
+                                                       F(  1,   104) =   31.80
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0580
+                                                       Root MSE      =  .46534
+
+                                (Std. Err. adjusted for 105 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .2310005   .0409664     5.64   0.000     .1497627    .3122384
+       _cons |   .5230978   .0308107    16.98   0.000      .461999    .5841966
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. clear;
+
+. ************************************************************************************************************;
+. **PANEL C:  TEACHER QUALIFICATIONS;
+. use "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\Teacher_test.dta";
+
+. gen score=comp1+comp2+comp3+clozet+story+attitude+nnc1+nc1+nc2+nnc2+nnc3+nc3+vp+map;
+
+. keep schid score;
+
+. sort schid;
+
+. merge schid using randomcheck_coded;
+variable schid does not uniquely identify observations in randomcheck_coded.dta
+
+. keep if RC==1;
+(2 observations deleted)
+
+. drop if score==.;
+(149 observations deleted)
+
+. egen med_score=median(score);
+
+. gen above_score=0;
+
+. replace above_score=1 if score>=med_score;
+(1582 real changes made)
+
+. drop if time==1;
+(75 observations deleted)
+
+. preserve;
+
+. keep if above_score==1;
+(1382 observations deleted)
+
+. sum open if treat==0;
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |       702    .6339031    .4820799          0          1
+
+. sum open if treat==1;
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |       843    .7793594    .4149247          0          1
+
+. regress open treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1545
+                                                       F(  1,    53) =   12.48
+                                                       Prob > F      =  0.0009
+                                                       R-squared     =  0.0256
+                                                       Root MSE      =  .44669
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1454563   .0411669     3.53   0.001      .062886    .2280266
+       _cons |   .6339031   .0333367    19.02   0.000     .5670382    .7007681
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time<9, cluster(schid);
+
+Linear regression                                      Number of obs =     423
+                                                       F(  1,    53) =    9.17
+                                                       Prob > F      =  0.0038
+                                                       R-squared     =  0.0305
+                                                       Root MSE      =  .41787
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1484941   .0490432     3.03   0.004     .0501258    .2468624
+       _cons |    .685567   .0416306    16.47   0.000     .6020665    .7690675
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time>8 & time<16, cluster(schid);
+
+Linear regression                                      Number of obs =     327
+                                                       F(  1,    53) =    7.85
+                                                       Prob > F      =  0.0071
+                                                       R-squared     =  0.0274
+                                                       Root MSE      =  .43221
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1456233   .0519815     2.80   0.007     .0413617     .249885
+       _cons |    .662069   .0428493    15.45   0.000     .5761241    .7480138
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time>15, cluster(schid);
+
+Linear regression                                      Number of obs =     795
+                                                       F(  1,    52) =    6.69
+                                                       Prob > F      =  0.0125
+                                                       R-squared     =  0.0232
+                                                       Root MSE      =  .46425
+
+                                 (Std. Err. adjusted for 53 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1433846   .0554374     2.59   0.013     .0321412     .254628
+       _cons |   .5950413   .0411019    14.48   0.000     .5125644    .6775182
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. restore;
+
+. preserve;
+
+. keep if above_score==0;
+(1545 observations deleted)
+
+. sum open if treat==0;
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |       757    .5336856    .4991938          0          1
+
+. sum open if treat==1;
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |       625       .7776    .4161915          0          1
+
+. regress open treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1382
+                                                       F(  1,    52) =   30.17
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0643
+                                                       Root MSE      =  .46351
+
+                                 (Std. Err. adjusted for 53 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .2439144   .0444089     5.49   0.000     .1548014    .3330274
+       _cons |   .5336856   .0297825    17.92   0.000     .4739226    .5934486
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time<9, cluster(schid);
+
+Linear regression                                      Number of obs =     412
+                                                       F(  1,    52) =   14.66
+                                                       Prob > F      =  0.0003
+                                                       R-squared     =  0.0515
+                                                       Root MSE      =  .44882
+
+                                 (Std. Err. adjusted for 53 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .2104922   .0549727     3.83   0.000     .1001815     .320803
+       _cons |   .6051502   .0375118    16.13   0.000     .5298772    .6804232
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time>8 & time<16, cluster(schid);
+
+Linear regression                                      Number of obs =     300
+                                                       F(  1,    49) =    5.16
+                                                       Prob > F      =  0.0276
+                                                       R-squared     =  0.0241
+                                                       Root MSE      =  .45564
+
+                                 (Std. Err. adjusted for 50 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1435893    .063229     2.27   0.028     .0165258    .2706528
+       _cons |   .6325301   .0398953    15.85   0.000     .5523576    .7127026
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. regress open treat if time>15, cluster(schid);
+
+Linear regression                                      Number of obs =     670
+                                                       F(  1,    46) =   27.61
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.1020
+                                                       Root MSE      =  .46712
+
+                                 (Std. Err. adjusted for 47 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .3150695   .0599625     5.25   0.000     .1943712    .4357677
+       _cons |   .4413408   .0424888    10.39   0.000     .3558152    .5268663
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table2.csv", bdec(2) se 3aster rdec(2) comma
+>  bracket append;
+
+. restore;
+
+. 
+end of do-file
+
+. 
+. *****************************************************************************************
+. **TABLE 3 AND FIGURE 3
+. do "C:\Incentives_Matter_Data\Incentives_FINAL\Programs\Table 3 Col 1 2.do"
+
+. **TABLE 3:  COLUMNS 1 and 2 
+. 
+. *set environment
+. clear
+
+. capture log close

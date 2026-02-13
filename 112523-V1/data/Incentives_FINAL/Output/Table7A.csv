@@ -1,0 +1,15 @@
+,(1),(2),(3),(4)
+,attendance,,,
+treat,0.01,,0.04,
+,[0.03],,[0.03],
+treatpre,,0.02,,0.02
+,,[0.03],,[0.03]
+treatpost,,0.03,,0.04
+,,[0.04],,[0.04]
+treatexp,,0.00,,0.05
+Observations,39775,39775,23693,23693
+R-squared,0.00,0.03,0.00,0.02
+Robust standard errors in brackets,,,,
+* significant at 10%; ** significant at 5%; *** significant at 1%,,,,
+,,[0.03],,
+,,,,[0.03]

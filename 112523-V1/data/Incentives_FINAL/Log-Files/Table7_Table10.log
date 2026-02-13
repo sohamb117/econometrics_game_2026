@@ -1,0 +1,1164 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table7_Table10.log
+  log type:  text
+ opened on:   1 Jun 2011, 14:13:39
+
+. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster";
+C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster
+
+. set more off;
+
+. set mem 1000m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory         1000M    max. data space              1,000.000M
+    set matsize         150     max. RHS vars in models          0.184M
+                                                            -----------
+                                                             1,002.093M
+
+. set matsize 150;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory         1000M    max. data space              1,000.000M
+    set matsize         150     max. RHS vars in models          0.184M
+                                                            -----------
+                                                             1,002.093M
+
+. ******************************************************************************************************************
+> ;
+. **A.  Load Roster Data;
+. ******************************************************************************************************************
+> ;
+. use "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster\roster_rema2012.dta";
+
+. drop if month==12 & year==2005;
+(138 observations deleted)
+
+. append using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster\rosterfin";
+(note: reason is int in using data but will be str80 now)
+
+. sort schid childno attendance;
+
+. drop if year==2003 & month<9;
+(3471 observations deleted)
+
+. drop if year==205;
+(29 observations deleted)
+
+. gen time=2 if month==9 & year==2003;
+(127591 missing values generated)
+
+. replace time=3 if month==10 & year==2003;
+(2799 real changes made)
+
+. replace time=4 if month==11 & year==2003;
+(4443 real changes made)
+
+. replace time=5 if month==12 & year==2003;
+(3234 real changes made)
+
+. replace time=6 if month==1 & year==2004;
+(3346 real changes made)
+
+. replace time=7 if month==2 & year==2004;
+(3498 real changes made)
+
+. replace time=8 if month==3 & year==2004;
+(3384 real changes made)
+
+. replace time=9 if month==4 & year==2004;
+(3535 real changes made)
+
+. replace time=10 if month==5 & year==2004;
+(3181 real changes made)
+
+. replace time=11 if month==6 & year==2004;
+(3173 real changes made)
+
+. replace time=12 if month==7 & year==2004;
+(7043 real changes made)
+
+. replace time=13 if month==8 & year==2004;
+(5397 real changes made)
+
+. replace time=14 if month==9 & year==2004;
+(5860 real changes made)
+
+. replace time=15 if month==10 & year==2004;
+(4305 real changes made)
+
+. replace time=16 if month==11 & year==2004;
+(3821 real changes made)
+
+. replace time=17 if month==12 & year==2004;
+(5878 real changes made)
+
+. replace time=18 if month==1 & year==2005;
+(4232 real changes made)
+
+. replace time=19 if month==2 & year==2005;
+(4494 real changes made)
+
+. replace time=20 if month==3 & year==2005;
+(4300 real changes made)
+
+. replace time=21 if month==4 & year==2005;
+(4109 real changes made)
+
+. replace time=22 if month==5 & year==2005;
+(4162 real changes made)
+
+. replace time=23 if month==6 & year==2005;
+(3815 real changes made)
+
+. replace time=24 if month==7 & year==2005;
+(8846 real changes made)
+
+. replace time=25 if month==8 & year==2005;
+(8386 real changes made)
+
+. replace time=26 if month==9 & year==2005;
+(7180 real changes made)
+
+. replace time=27 if month==10 & year==2005;
+(5263 real changes made)
+
+. replace time=28 if month==11 & year==2005;
+(4034 real changes made)
+
+. replace time=29 if month==12 & year==2005;
+(2165 real changes made)
+
+. replace time=30 if month==1 & year==2006;
+(2101 real changes made)
+
+. replace time=31 if month==2 & year==2006;
+(1607 real changes made)
+
+. gen trend=time-1;
+
+. **ATTENDANCE=0 MEANS STUDENT IS NOT PRESENT THAT DAY;
+. replace attendance = 2 if attendance ==-999 |attendance ==-888 |attendance ==-777 |attendance ==-666 |attendance =
+> =-444 |attendance ==-333 ;
+(59037 real changes made)
+
+. replace attendance=0 if attendance==2;
+(99603 real changes made)
+
+. replace attendance=0 if attendance==22;
+(9 real changes made)
+
+. **CODING STATUS OF CHILD;
+. gen reg=.;
+(132553 missing values generated)
+
+. replace reg=0 if status==1;
+(6311 real changes made)
+
+. replace reg=1 if status==2;
+(42181 real changes made)
+
+. label variable reg "CHILD ATTENDS SCHOOL REGULARLY (>10 DAYS)";
+
+. ******************************************************************************************************************
+> ;
+. **B.  GETING RANDOM CHECK DATA;
+. ******************************************************************************************************************
+> ;
+. sort schid year month day;
+
+. merge schid year month day using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster\rc_for_ro
+> ster";
+variables schid year month day do not uniquely identify observations in the master data
+variables schid year month day do not uniquely identify observations in
+    C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster\rc_for_roster.dta
+
+. drop if randomcheck==.;
+(5157 observations deleted)
+
+. drop if month==8 & year==2003;
+(117 observations deleted)
+
+. save Temp/temp1, replace;
+file Temp/temp1.dta saved
+
+. clear;
+
+. ******************************************************************************************************************
+> ;
+. **D.  MERGE IN ENROLLMENT DATA;
+. ******************************************************************************************************************
+> ;
+. **ENROLLED STATUS;
+. use Temp/temp1;
+
+. drop _merge;
+
+. sort schid childno;
+
+. merge schid childno using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster\enroll1";
+variables schid childno do not uniquely identify observations in the master data
+variables schid childno do not uniquely identify observations in C:\Incentives_Matter_Data\Incentives_FINAL\Raw
+    Data\RandomCheck\Roster\enroll1.dta
+
+. drop _merge;
+
+. sort schid childno;
+
+. merge schid childno using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Roster\pre_writ_attend"
+> ;
+variables schid childno do not uniquely identify observations in the master data
+variables schid childno do not uniquely identify observations in C:\Incentives_Matter_Data\Incentives_FINAL\Raw
+    Data\RandomCheck\Roster\pre_writ_attend.dta
+
+. ***INTERACTIONS IN TIME PERIODS;
+. gen pretest=1 if time<10;
+(101818 missing values generated)
+
+. replace pretest=0 if pretest==.;
+(101818 real changes made)
+
+. gen posttest=1 if time==10 | time==11 | time==12 | time==13 | time==14 | time==15;
+(99387 missing values generated)
+
+. replace posttest=0 if posttest !=1;
+(99387 real changes made)
+
+. gen postexp=0;
+
+. replace postexp=1 if time>15;
+(73699 real changes made)
+
+. gen treatpre=treat*pretest;
+
+. gen treatpost=treat*posttest;
+
+. gen treatexp=treat*postexp;
+
+. sort time;
+
+. tab time, gen(t_);
+
+       time |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          2 |      2,359        1.85        1.85
+          3 |      2,288        1.80        3.65
+          4 |      4,256        3.34        6.99
+          5 |      3,209        2.52        9.51
+          6 |      3,298        2.59       12.10
+          7 |      3,447        2.71       14.80
+          8 |      3,297        2.59       17.39
+          9 |      3,534        2.77       20.16
+         10 |      3,180        2.50       22.66
+         11 |      3,171        2.49       25.15
+         12 |      6,932        5.44       30.59
+         13 |      5,307        4.17       34.76
+         14 |      5,746        4.51       39.27
+         15 |      3,783        2.97       42.24
+         16 |      3,534        2.77       45.01
+         17 |      5,772        4.53       49.54
+         18 |      4,232        3.32       52.86
+         19 |      4,481        3.52       56.38
+         20 |      4,265        3.35       59.73
+         21 |      3,991        3.13       62.86
+         22 |      4,162        3.27       66.13
+         23 |      3,779        2.97       69.09
+         24 |      8,768        6.88       75.98
+         25 |      8,298        6.51       82.49
+         26 |      7,179        5.64       88.13
+         27 |      5,263        4.13       92.26
+         28 |      4,034        3.17       95.42
+         29 |      2,123        1.67       97.09
+         30 |      2,101        1.65       98.74
+         31 |      1,607        1.26      100.00
+------------+-----------------------------------
+      Total |    127,396      100.00
+
+. drop if time==1;
+(0 observations deleted)
+
+. drop if childno==.;
+(110 observations deleted)
+
+. **KEEPING ONLY ENROLLED KIDS;
+. keep if enrolled1==1;
+(71211 observations deleted)
+
+. save Temp\Roster_CODED, replace;
+file Temp\Roster_CODED.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **E.  TABLE 7;
+. ******************************************************************************************************************
+> ;
+. **PANEL A, COL 1;
+. preserve;
+
+. keep if open==1;
+(16409 observations deleted)
+
+. sort treat;
+
+. by treat: sum attendance;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     16280     .455774    .4980555          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     23495    .4618429    .4985525          0          1
+
+
+. reg attendance treat , cluster(schid);
+
+Linear regression                                      Number of obs =   39775
+                                                       F(  1,   110) =    0.05
+                                                       Prob > F      =  0.8305
+                                                       R-squared     =  0.0000
+                                                       Root MSE      =  .49835
+
+                                (Std. Err. adjusted for 111 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |    .006069   .0282762     0.21   0.830    -.0499677    .0621057
+       _cons |    .455774   .0232069    19.64   0.000     .4097834    .5017645
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7A.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket replace;
+
+. regress attendance treatpre treatpost treatexp t_*, cluster(schid);
+
+Linear regression                                      Number of obs =   39775
+                                                       F( 32,   110) =   17.23
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0325
+                                                       Root MSE      =  .49039
+
+                                (Std. Err. adjusted for 111 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    treatpre |   .0198192   .0258449     0.77   0.445    -.0313993    .0710377
+   treatpost |   .0267228   .0380358     0.70   0.484    -.0486552    .1021009
+    treatexp |   .0020548   .0320167     0.06   0.949    -.0613948    .0655045
+         t_1 |   .3111605   .0455596     6.83   0.000      .220872     .401449
+         t_2 |   .0578403   .0527073     1.10   0.275    -.0466132    .1622938
+         t_3 |   .2438052   .0428435     5.69   0.000     .1588994    .3287109
+         t_4 |   .2222424   .0453196     4.90   0.000     .1324297    .3120551
+         t_5 |   .2472177   .0398455     6.20   0.000     .1682532    .3261821
+         t_6 |    .231164   .0426105     5.43   0.000     .1467199    .3156081
+         t_7 |   .1633347   .0433546     3.77   0.000      .077416    .2492534
+         t_8 |   .2136668   .0412883     5.17   0.000     .1318432    .2954905
+         t_9 |   .1075537   .0471666     2.28   0.025     .0140806    .2010268
+        t_10 |   .1248085   .0502147     2.49   0.014     .0252948    .2243223
+        t_11 |   .2127418   .0433374     4.91   0.000     .1268573    .2986263
+        t_12 |   .1750915   .0456938     3.83   0.000      .084537    .2656459
+        t_13 |   .1485523   .0473593     3.14   0.002     .0546974    .2424073
+        t_14 |   .0882065   .0455694     1.94   0.055    -.0021013    .1785144
+        t_15 |   .0521226   .0417337     1.25   0.214    -.0305838    .1348289
+        t_16 |   .1339417    .042058     3.18   0.002     .0505926    .2172908
+        t_17 |   .1430183     .03909     3.66   0.000      .065551    .2204856
+        t_18 |   .1254663   .0404637     3.10   0.002     .0452768    .2056558
+        t_19 |   .0869712   .0375968     2.31   0.023     .0124632    .1614793
+        t_20 |   .0897948   .0385591     2.33   0.022     .0133797    .1662099
+        t_21 |   .0781806   .0389102     2.01   0.047     .0010697    .1552915
+        t_22 |   .0487354   .0423099     1.15   0.252     -.035113    .1325838
+        t_23 |   .0524148   .0393466     1.33   0.186     -.025561    .1303906
+        t_24 |  -.0054275   .0382259    -0.14   0.887    -.0811821    .0703272
+        t_25 |   .0549121   .0412793     1.33   0.186    -.0268937     .136718
+        t_26 |   .0207229   .0360981     0.57   0.567    -.0508151    .0922609
+        t_27 |  -.0359014   .0346417    -1.04   0.302    -.1045531    .0327504
+        t_28 |   .0107763   .0376137     0.29   0.775    -.0637652    .0853177
+        t_29 |  (dropped)
+        t_30 |    .014641   .0410714     0.36   0.722    -.0667529    .0960349
+       _cons |   .3190204   .0415425     7.68   0.000     .2366929    .4013479
+------------------------------------------------------------------------------
+
+. outreg treatpre treatpost treatexp using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7A.csv", bdec(2) 
+> nocons se 3aster rdec(2) comma bracket append;
+
+. restore;
+
+. **PANEL B, COL 1;
+. preserve;
+
+. sort treat;
+
+. by treat: sum attendance;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     26695    .2783293    .4481848          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     29489    .3690868    .4825657          0          1
+
+
+. reg attendance treat , cluster(schid);
+
+Linear regression                                      Number of obs =   56184
+                                                       F(  1,   112) =   10.72
+                                                       Prob > F      =  0.0014
+                                                       R-squared     =  0.0093
+                                                       Root MSE      =  .46655
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0907575   .0277249     3.27   0.001     .0358242    .1456908
+       _cons |   .2783293   .0210495    13.22   0.000     .2366223    .3200362
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7B.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket replace;
+
+. regress attendance treatpre treatpost treatexp t_*, cluster(schid);
+
+Linear regression                                      Number of obs =   56184
+                                                       F( 32,   112) =   15.63
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0523
+                                                       Root MSE      =  .45645
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    treatpre |   .0967845   .0310094     3.12   0.002     .0353434    .1582256
+   treatpost |   .1023683   .0390457     2.62   0.010     .0250043    .1797322
+    treatexp |   .0824024   .0299676     2.75   0.007     .0230254    .1417794
+         t_1 |   .2378635   .0501275     4.75   0.000     .1385422    .3371848
+         t_2 |  -.0111665   .0431187    -0.26   0.796    -.0966007    .0742678
+         t_3 |    .254947    .042262     6.03   0.000     .1712102    .3386837
+         t_4 |    .237285   .0466189     5.09   0.000     .1449156    .3296544
+         t_5 |    .231588   .0430021     5.39   0.000     .1463849    .3167911
+         t_6 |   .2296123   .0440077     5.22   0.000     .1424167     .316808
+         t_7 |   .0847374   .0444513     1.91   0.059    -.0033372    .1728119
+         t_8 |   .1731697   .0459701     3.77   0.000     .0820858    .2642537
+         t_9 |   .0636057   .0409669     1.55   0.123    -.0175649    .1447763
+        t_10 |   .0142541   .0422909     0.34   0.737      -.06954    .0980481
+        t_11 |   .2347682   .0416732     5.63   0.000     .1521982    .3173383
+        t_12 |   .1252517   .0451898     2.77   0.007     .0357138    .2147896
+        t_13 |   .1467587    .043419     3.38   0.001     .0607296    .2327878
+        t_14 |   .1175213    .042126     2.79   0.006     .0340541    .2009885
+        t_15 |   .0673133   .0428026     1.57   0.119    -.0174946    .1521212
+        t_16 |   .0984563   .0405951     2.43   0.017     .0180224    .1788903
+        t_17 |   .1030457   .0392376     2.63   0.010     .0253013      .18079
+        t_18 |   .1316402   .0387123     3.40   0.001     .0549368    .2083436
+        t_19 |   .0409656   .0343864     1.19   0.236    -.0271666    .1090978
+        t_20 |   .0837216   .0370838     2.26   0.026     .0102448    .1571983
+        t_21 |  -.0110848   .0380327    -0.29   0.771    -.0864416    .0642721
+        t_22 |  -.0186553   .0382971    -0.49   0.627    -.0945361    .0572255
+        t_23 |   .0215795   .0389652     0.55   0.581    -.0556251    .0987841
+        t_24 |  -.0322748   .0375904    -0.86   0.392    -.1067554    .0422058
+        t_25 |   .0174346   .0387593     0.45   0.654    -.0593619    .0942312
+        t_26 |   .0140725   .0347765     0.40   0.687    -.0548327    .0829778
+        t_27 |  -.0415908   .0319702    -1.30   0.196    -.1049356    .0217541
+        t_28 |   .0084795   .0399117     0.21   0.832    -.0706004    .0875593
+        t_29 |  -.0120055    .042184    -0.28   0.776    -.0955877    .0715768
+        t_30 |  (dropped)
+       _cons |   .1798198   .0337101     5.33   0.000     .1130275    .2466122
+------------------------------------------------------------------------------
+
+. outreg treatpre treatpost treatexp using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7B.csv", bdec(2) 
+> nocons se 3aster rdec(2) comma bracket append;
+
+. restore;
+
+. ******************************************************************************************************************
+> ;
+. **E.  DEFINING DROPOUTS;
+. ******************************************************************************************************************
+> ;
+. **DEFINING CHILD THAT DROPPED OUT;
+. keep if open==1;
+(16409 observations deleted)
+
+. gsort schid childno -year -month -day;
+
+. gen last=0;
+
+. replace last=last[_n-1]+1 if childno==childno[_n-1] & schid==schid[_n-1];
+(37579 real changes made)
+
+. keep if last<5;
+(29063 observations deleted)
+
+. gen tempgov=0;
+
+. replace tempgov=1 if reason=="2";
+(1738 real changes made)
+
+. sort schid childno treat;
+
+. collapse (sum) attendance tempgov, by(schid childno treat);
+
+. tab attendance;
+
+      (sum) |
+ attendance |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        884       40.24       40.24
+          1 |        338       15.38       55.62
+          2 |        258       11.74       67.36
+          3 |        259       11.79       79.15
+          4 |        264       12.02       91.17
+          5 |        194        8.83      100.00
+------------+-----------------------------------
+      Total |      2,197      100.00
+
+. tab tempgov;
+
+      (sum) |
+    tempgov |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,567       71.32       71.32
+          1 |        147        6.69       78.02
+          2 |        132        6.01       84.02
+          3 |        150        6.83       90.85
+          4 |        128        5.83       96.68
+          5 |         73        3.32      100.00
+------------+-----------------------------------
+      Total |      2,197      100.00
+
+. gen drop=0;
+
+. replace drop=1 if attendance==0;
+(884 real changes made)
+
+. gen gov=0;
+
+. replace gov=1 if tempgov!=0 & drop==1;
+(461 real changes made)
+
+. keep schid childno drop gov treat;
+
+. sort schid childno treat;
+
+. save Temp\drop, replace;
+file Temp\drop.dta saved
+
+. clear;
+
+. use Temp\Roster_CODED;
+
+. drop _merge;
+
+. sort schid childno treat;
+
+. merge schid childno treat using Temp\drop;
+variables schid childno treat do not uniquely identify observations in the master data
+
+. **RUNNING REGRESSIONS FOR NONDROPOUTS;
+. **PANEL A, ROW 2;
+. preserve;
+
+. keep if open==1;
+(16409 observations deleted)
+
+. gen drop2=drop;
+
+. replace drop2=0 if gov==1;
+(8979 real changes made)
+
+. keep if drop==0;
+(16083 observations deleted)
+
+. sort treat;
+
+. by treat: sum attendance;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     10737    .5834963     .493002          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     12956     .621025    .4851506          0          1
+
+
+. reg attendance treat, cluster(schid);
+
+Linear regression                                      Number of obs =   23693
+                                                       F(  1,   109) =    1.49
+                                                       Prob > F      =  0.2242
+                                                       R-squared     =  0.0015
+                                                       Root MSE      =  .48872
+
+                                (Std. Err. adjusted for 110 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0375287   .0307029     1.22   0.224    -.0233235    .0983809
+       _cons |   .5834963   .0262804    22.20   0.000     .5314094    .6355833
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7A.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket append;
+
+. regress attendance treatpre treatpost treatexp t_*, cluster(schid);
+
+Linear regression                                      Number of obs =   23693
+                                                       F( 32,   109) =    6.19
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0157
+                                                       Root MSE      =  .48554
+
+                                (Std. Err. adjusted for 110 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    treatpre |   .0219442   .0299219     0.73   0.465    -.0373599    .0812484
+   treatpost |   .0398015   .0396027     1.01   0.317    -.0386897    .1182927
+    treatexp |    .052079   .0319053     1.63   0.106    -.0111562    .1153142
+         t_1 |   .1334802   .0505019     2.64   0.009     .0333871    .2335734
+         t_2 |  -.0969329   .0612447    -1.58   0.116    -.2183179    .0244522
+         t_3 |   .1052799   .0481627     2.19   0.031     .0098231    .2007368
+         t_4 |   .0877683   .0471067     1.86   0.065    -.0055958    .1811323
+         t_5 |    .111007   .0480823     2.31   0.023     .0157093    .2063046
+         t_6 |   .1075534   .0452947     2.37   0.019     .0177808     .197326
+         t_7 |   .0279527   .0540344     0.52   0.606    -.0791418    .1350472
+         t_8 |   .0981489    .047368     2.07   0.041     .0042671    .1920307
+         t_9 |  -.0326459   .0572111    -0.57   0.569    -.1460365    .0807447
+        t_10 |   .0023236   .0626954     0.04   0.971    -.1219366    .1265839
+        t_11 |   .1643853   .0531002     3.10   0.002     .0591425    .2696281
+        t_12 |   .1546709   .0521667     2.96   0.004     .0512783    .2580635
+        t_13 |   .0867033    .052448     1.65   0.101    -.0172469    .1906536
+        t_14 |  -.0009226   .0504938    -0.02   0.985    -.1009995    .0991544
+        t_15 |  -.0279587   .0498643    -0.56   0.576    -.1267881    .0708708
+        t_16 |   .0487196   .0500998     0.97   0.333    -.0505766    .1480158
+        t_17 |   .0779424    .047198     1.65   0.102    -.0156025    .1714873
+        t_18 |   .0697585   .0488622     1.43   0.156    -.0270848    .1666018
+        t_19 |   .0035817   .0470484     0.08   0.939    -.0896666    .0968301
+        t_20 |   .0338703   .0464021     0.73   0.467    -.0580972    .1258378
+        t_21 |  -.0026216   .0508712    -0.05   0.959    -.1034467    .0982034
+        t_22 |  -.0119553   .0512654    -0.23   0.816    -.1135617    .0896512
+        t_23 |   .0331701   .0540998     0.61   0.541     -.074054    .1403942
+        t_24 |    .034104   .0503536     0.68   0.500    -.0656952    .1339032
+        t_25 |   .0457516   .0517663     0.88   0.379    -.0568476    .1483508
+        t_26 |   .0467697   .0516148     0.91   0.367    -.0555291    .1490685
+        t_27 |  -.0665005   .0471766    -1.41   0.162    -.1600029    .0270019
+        t_28 |  -.0117505   .0550127    -0.21   0.831    -.1207838    .0972829
+        t_29 |  -.0140363   .0623275    -0.23   0.822    -.1375674    .1094948
+        t_30 |  (dropped)
+       _cons |   .5300446   .0446977    11.86   0.000     .4414552     .618634
+------------------------------------------------------------------------------
+
+. outreg treatpre treatpost treatexp using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7A.csv", bdec(2) 
+> nocons se 3aster rdec(2) comma bracket append;
+
+. restore;
+
+. **PANEL B, ROW 2;
+. preserve;
+
+. gen drop2=drop;
+(173 missing values generated)
+
+. replace drop2=0 if gov==1;
+(12153 real changes made)
+
+. keep if drop==0;
+(22664 observations deleted)
+
+. sort treat;
+
+. by treat: sum attendance;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     17247    .3638314    .4811149          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     16274    .4961288    .5000004          0          1
+
+
+. reg attendance treat, cluster(schid);
+
+Linear regression                                      Number of obs =   33521
+                                                       F(  1,   109) =   16.21
+                                                       Prob > F      =  0.0001
+                                                       R-squared     =  0.0179
+                                                       Root MSE      =  .49037
+
+                                (Std. Err. adjusted for 110 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1322974   .0328552     4.03   0.000     .0671796    .1974153
+       _cons |   .3638314   .0260061    13.99   0.000     .3122882    .4153746
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7B.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket append;
+
+. regress attendance treatpre treatpost treatexp t_*, cluster(schid);
+
+Linear regression                                      Number of obs =   33521
+                                                       F( 32,   109) =   11.63
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0507
+                                                       Root MSE      =  .48233
+
+                                (Std. Err. adjusted for 110 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    treatpre |   .0954141   .0353351     2.70   0.008     .0253811    .1654471
+   treatpost |   .1286443   .0453182     2.84   0.005      .038825    .2184636
+    treatexp |   .1504504    .037173     4.05   0.000     .0767748     .224126
+         t_1 |   .1660197   .0618608     2.68   0.008     .0434136    .2886258
+         t_2 |  -.0848386   .0564165    -1.50   0.136    -.1966542    .0269771
+         t_3 |   .2225336   .0628564     3.54   0.001     .0979543     .347113
+         t_4 |   .1945407   .0667133     2.92   0.004      .062317    .3267644
+         t_5 |    .189357    .068769     2.75   0.007     .0530591    .3256549
+         t_6 |   .1852872   .0567218     3.27   0.001     .0728665    .2977079
+         t_7 |   .0315911   .0671596     0.47   0.639    -.1015171    .1646992
+         t_8 |   .1301005   .0606081     2.15   0.034     .0099771    .2502239
+         t_9 |   .0146716   .0620695     0.24   0.814    -.1083482    .1376913
+        t_10 |  -.0378513   .0706166    -0.54   0.593    -.1778111    .1021085
+        t_11 |   .2664086   .0590595     4.51   0.000     .1493546    .3834626
+        t_12 |   .1407462   .0659462     2.13   0.035     .0100431    .2714494
+        t_13 |   .1649811   .0696315     2.37   0.020     .0269737    .3029885
+        t_14 |   .1183094   .0660264     1.79   0.076    -.0125528    .2491716
+        t_15 |   .0497015   .0627174     0.79   0.430    -.0746024    .1740054
+        t_16 |   .0654191   .0634342     1.03   0.305    -.0603056    .1911437
+        t_17 |   .0919387   .0622082     1.48   0.142     -.031356    .2152334
+        t_18 |   .1446531    .060835     2.38   0.019       .02408    .2652262
+        t_19 |    .005025   .0552706     0.09   0.928    -.1045195    .1145695
+        t_20 |   .0863162   .0590338     1.46   0.147    -.0306869    .2033193
+        t_21 |  -.0545186    .062589    -0.87   0.386     -.178568    .0695308
+        t_22 |  -.0590687    .063306    -0.93   0.353    -.1845391    .0664016
+        t_23 |   .0324353   .0608505     0.53   0.595    -.0881683     .153039
+        t_24 |  -.0308172   .0606467    -0.51   0.612     -.151017    .0893826
+        t_25 |    .032874    .058038     0.57   0.572    -.0821554    .1479034
+        t_26 |   .0459022   .0563988     0.81   0.417    -.0658785    .1576828
+        t_27 |  -.0516097    .052387    -0.99   0.327    -.1554391    .0522197
+        t_28 |   .0320326   .0576158     0.56   0.579    -.0821601    .1462253
+        t_29 |  (dropped)
+        t_30 |   .0159576   .0705489     0.23   0.821    -.1238679    .1557832
+       _cons |   .2857361   .0567698     5.03   0.000     .1732202    .3982519
+------------------------------------------------------------------------------
+
+. outreg treatpre treatpost treatexp using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7B.csv", bdec(2) 
+> nocons se 3aster rdec(2) comma bracket append;
+
+. restore;
+
+. **PANEL C ROW 1;
+. preserve;
+
+. keep if pre_writ==0;
+(10232 observations deleted)
+
+. gen drop2=drop;
+(152 missing values generated)
+
+. replace drop2=0 if gov==1;
+(8941 real changes made)
+
+. keep if drop==0;
+(16840 observations deleted)
+
+. sort treat;
+
+. by treat: sum attendance;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     14335    .3592606    .4798004          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |     14778    .4974963    .5000106          0          1
+
+
+. reg attendance treat, cluster(schid);
+
+Linear regression                                      Number of obs =   29113
+                                                       F(  1,   109) =   18.89
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0195
+                                                       Root MSE      =  .49016
+
+                                (Std. Err. adjusted for 110 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1382357   .0318036     4.35   0.000     .0752021    .2012694
+       _cons |   .3592606   .0248499    14.46   0.000     .3100089    .4085122
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7C.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket replace;
+
+. regress attendance treatpre treatpost treatexp t_*, cluster(schid);
+
+Linear regression                                      Number of obs =   29113
+                                                       F( 32,   109) =   10.77
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0488
+                                                       Root MSE      =  .48305
+
+                                (Std. Err. adjusted for 110 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    treatpre |   .1063197   .0342889     3.10   0.002     .0383602    .1742792
+   treatpost |   .1388694   .0461444     3.01   0.003     .0474128     .230326
+    treatexp |   .1520999   .0358107     4.25   0.000     .0811242    .2230756
+         t_1 |   .1130568   .0709501     1.59   0.114    -.0275641    .2536777
+         t_2 |  -.1245075   .0654867    -1.90   0.060    -.2542999     .005285
+         t_3 |    .163705   .0626837     2.61   0.010     .0394679     .287942
+         t_4 |    .130757      .0679     1.93   0.057    -.0038185    .2653326
+         t_5 |   .1370718   .0624449     2.20   0.030     .0133081    .2608355
+         t_6 |    .141729    .066462     2.13   0.035     .0100035    .2734545
+         t_7 |   -.026111   .0641625    -0.41   0.685    -.1532789     .101057
+         t_8 |   .0741918   .0709983     1.04   0.298    -.0665244    .2149081
+         t_9 |  -.0425696   .0657797    -0.65   0.519    -.1729429    .0878036
+        t_10 |  -.0722972   .0638915    -1.13   0.260    -.1989282    .0543337
+        t_11 |   .2112268   .0636953     3.32   0.001     .0849847    .3374688
+        t_12 |   .1064189   .0695558     1.53   0.129    -.0314385    .2442763
+        t_13 |   .1186678   .0661248     1.79   0.075    -.0123894    .2497249
+        t_14 |    .067213   .0649895     1.03   0.303    -.0615941      .19602
+        t_15 |  -.0006662   .0712582    -0.01   0.993    -.1418977    .1405653
+        t_16 |   .0172094    .062509     0.28   0.784    -.1066815    .1411002
+        t_17 |   .0650061   .0643209     1.01   0.314    -.0624759    .1924881
+        t_18 |   .1096825   .0640435     1.71   0.090    -.0172496    .2366146
+        t_19 |   -.032396   .0599539    -0.54   0.590    -.1512226    .0864306
+        t_20 |   .0401453   .0626522     0.64   0.523    -.0840293    .1643198
+        t_21 |   -.093179    .063968    -1.46   0.148    -.2199615    .0336035
+        t_22 |   -.092088   .0642677    -1.43   0.155    -.2194645    .0352884
+        t_23 |    .005105   .0674899     0.08   0.940    -.1286578    .1388679
+        t_24 |  -.0482254   .0670956    -0.72   0.474    -.1812067    .0847559
+        t_25 |   .0012811   .0651531     0.02   0.984    -.1278502    .1304124
+        t_26 |   .0292883   .0596759     0.49   0.625    -.0889874     .147564
+        t_27 |  -.0920398   .0573356    -1.61   0.111    -.2056772    .0215975
+        t_28 |   .0022076   .0701234     0.03   0.975    -.1367748    .1411899
+        t_29 |  -.0235916   .0770003    -0.31   0.760    -.1762038    .1290205
+        t_30 |  (dropped)
+       _cons |   .3236442   .0553837     5.84   0.000     .2138756    .4334129
+------------------------------------------------------------------------------
+
+. outreg treatpre treatpost treatexp using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7C.csv", bdec(2) 
+> nocons se 3aster rdec(2) comma bracket append;
+
+. restore;
+
+. **PANEL C ROW 2;
+. preserve;
+
+. keep if pre_writ==1;
+(45953 observations deleted)
+
+. gen drop2=drop;
+(21 missing values generated)
+
+. replace drop2=0 if gov==1;
+(3212 real changes made)
+
+. keep if drop==0;
+(5824 observations deleted)
+
+. sort treat;
+
+. by treat: sum attendance;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |      2912    .3863324    .4869919          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  attendance |      1496    .4826203     .499865          0          1
+
+
+. reg attendance treat, cluster(schid);
+
+Linear regression                                      Number of obs =    4408
+                                                       F(  1,    46) =    3.02
+                                                       Prob > F      =  0.0887
+                                                       R-squared     =  0.0085
+                                                       Root MSE      =   .4914
+
+                                 (Std. Err. adjusted for 47 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0962879    .055372     1.74   0.089    -.0151702     .207746
+       _cons |   .3863324    .039589     9.76   0.000     .3066438     .466021
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7C.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket append;
+
+. regress attendance treatpre treatpost treatexp t_*, cluster(schid);
+
+Linear regression                                      Number of obs =    4408
+                                                       F( 32,    46) =   17.34
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.0920
+                                                       Root MSE      =  .47193
+
+                                 (Std. Err. adjusted for 47 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  attendance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    treatpre |   .0661928    .065327     1.01   0.316    -.0653037    .1976892
+   treatpost |   .0689255   .0633793     1.09   0.282    -.0586505    .1965014
+    treatexp |   .1053229   .0663272     1.59   0.119    -.0281868    .2388326
+         t_1 |   .2845241   .1037458     2.74   0.009     .0756946    .4933535
+         t_2 |  -.0540353   .0884032    -0.61   0.544    -.2319817    .1239112
+         t_3 |   .3727716   .0993133     3.75   0.000     .1728643     .572679
+         t_4 |   .3828132   .0875221     4.37   0.000     .2066403    .5589861
+         t_5 |   .3004603   .0899231     3.34   0.002     .1194545     .481466
+         t_6 |   .2401062   .0895448     2.68   0.010     .0598619    .4203505
+         t_7 |   .1796516   .1023791     1.75   0.086     -.026427    .3857301
+         t_8 |   .2665269   .0854563     3.12   0.003     .0945122    .4385416
+         t_9 |   .1710815   .1147782     1.49   0.143     -.059955    .4021179
+        t_10 |  -.0279421   .1154798    -0.24   0.810    -.2603909    .2045066
+        t_11 |   .4105261   .1162329     3.53   0.001     .1765615    .6444908
+        t_12 |   .1413063   .1061728     1.33   0.190    -.0724085    .3550211
+        t_13 |   .2550935   .1159822     2.20   0.033     .0216334    .4885536
+        t_14 |   .2320947   .1220677     1.90   0.064    -.0136148    .4778042
+        t_15 |   .1797412   .1319453     1.36   0.180    -.0858509    .4453334
+        t_16 |   .1975057   .1099899     1.80   0.079    -.0238924    .4189038
+        t_17 |   .0734496   .1043695     0.70   0.485    -.1366354    .2835345
+        t_18 |   .1803671   .1052232     1.71   0.093    -.0314363    .3921705
+        t_19 |   .0543328    .090365     0.60   0.551    -.1275624     .236228
+        t_20 |      .1945   .0877679     2.22   0.032     .0178324    .3711675
+        t_21 |   .0043618   .1070957     0.04   0.968    -.2112107    .2199344
+        t_22 |  -.0368476   .0870406    -0.42   0.674    -.2120512    .1383561
+        t_23 |   .0127054   .0838822     0.15   0.880    -.1561407    .1815515
+        t_24 |  -.0962549   .0890196    -1.08   0.285    -.2754421    .0829324
+        t_25 |   .0444181   .0930389     0.48   0.635    -.1428595    .2316958
+        t_26 |  -.0351201   .0860384    -0.41   0.685    -.2083064    .1380662
+        t_27 |   .0174283   .0709721     0.25   0.807    -.1254312    .1602878
+        t_28 |  (dropped)
+        t_29 |  -.0816327   .0595187    -1.37   0.177    -.2014375    .0381722
+        t_30 |  -.0538236   .0895975    -0.60   0.551    -.2341741    .1265269
+       _cons |   .2416622   .0878488     2.75   0.008     .0648318    .4184926
+------------------------------------------------------------------------------
+
+. outreg treatpre treatpost treatexp using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table7C.csv", bdec(2) 
+> nocons se 3aster rdec(2) comma bracket append;
+
+. restore;
+
+. ******************************************************************************************************************
+> ;
+. **TABLE 10;
+. ******************************************************************************************************************
+> ;
+. clear;
+
+. use Temp/drop;
+
+. **DROPOUTS;
+. sort treat;
+
+. by treat: sum drop;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        drop |      1061    .3590952    .4799614          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        drop |      1136    .4427817     .496934          0          1
+
+
+. reg drop treat, cluster(schid);
+
+Linear regression                                      Number of obs =    2197
+                                                       F(  1,   110) =    4.15
+                                                       Prob > F      =  0.0440
+                                                       R-squared     =  0.0073
+                                                       Root MSE      =  .48881
+
+                                (Std. Err. adjusted for 111 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+        drop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0836865   .0410713     2.04   0.044     .0022928    .1650802
+       _cons |   .3590952   .0306599    11.71   0.000     .2983346    .4198558
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table10.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket replace;
+
+. **ENROLLED IN GOVT SCHOOLS;
+. sort treat;
+
+. by treat: sum gov;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+         gov |      1061    .1573987     .364348          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+         gov |      1136    .2588028      .43817          0          1
+
+
+. reg gov treat, cluster(schid);
+
+Linear regression                                      Number of obs =    2197
+                                                       F(  1,   110) =    8.46
+                                                       Prob > F      =  0.0044
+                                                       R-squared     =  0.0155
+                                                       Root MSE      =  .40421
+
+                                (Std. Err. adjusted for 111 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+         gov |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1014041   .0348622     2.91   0.004     .0323154    .1704929
+       _cons |   .1573987   .0218421     7.21   0.000     .1141127    .2006846
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table10.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket append;
+
+. **DROPOUTS WHO DID NOT ENROLL IN SCHOOL;
+. gen drop2=drop;
+
+. replace drop2=0 if gov==1;
+(461 real changes made)
+
+. sort treat;
+
+. by treat: sum drop2;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       drop2 |      1061    .2016965     .401456          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       drop2 |      1136    .1839789    .3876376          0          1
+
+
+. reg drop2 treat, cluster(schid);
+
+Linear regression                                      Number of obs =    2197
+                                                       F(  1,   110) =    0.33
+                                                       Prob > F      =  0.5640
+                                                       R-squared     =  0.0005
+                                                       Root MSE      =  .39437
+
+                                (Std. Err. adjusted for 111 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+       drop2 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.0177176   .0306155    -0.58   0.564    -.0783903     .042955
+       _cons |   .2016965   .0263741     7.65   0.000     .1494292    .2539638
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table10.csv", bdec(2) nocons se 3aster rdec(
+> 2) comma bracket append;
+
+. clear;
+
+. 
+end of do-file
+
+. 
+. *****************************************************************************************
+. **TABLE 8
+. do "C:\Incentives_Matter_Data\Incentives_FINAL\Programs\Table 8 Mid Test.do"
+
+. **TABLE 8 MIDTEST
+. 
+. clear
+
+. *SETTING ENVIRONMENT;
+. #delimit;
+delimiter now ;
+. capture log close;

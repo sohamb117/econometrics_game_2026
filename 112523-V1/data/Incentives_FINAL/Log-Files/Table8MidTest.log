@@ -1,0 +1,941 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table8MidTest.log
+  log type:  text
+ opened on:   1 Jun 2011, 14:15:21
+
+. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests";
+C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests
+
+. set more off;
+
+. set mem 400m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         150     max. RHS vars in models          0.184M
+                                                            -----------
+                                                               402.093M
+
+. set matsize 500;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. capture program drop zscore1;
+
+. capture program drop zscore;
+
+. ******************************************************************************************************************
+> ;
+. **Closed School data;
+. ******************************************************************************************************************
+> ;
+. use "Closed School.dta";
+
+. gen close=1 if mon10=="Closed" &  mon11=="Closed";
+(105 missing values generated)
+
+. gen schid=idnum;
+
+. keep schid close;
+
+. sort schid;
+
+. save Temp\tempclose, replace;
+file Temp\tempclose.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **PRE_TEST DATA;
+. ******************************************************************************************************************
+> ;
+. *PRETEST VERBAL;
+. use Baseline\pre_verbal;
+
+. rename total_1_to_4 pre_math_v;
+
+. rename total_5_to_11 pre_lang_v;
+
+. rename total pre_total_v;
+
+. gen pre_writ=0;
+
+. keep schid childno pre_math_v pre_lang_v pre_total_v pre_writ;
+
+. save Temp\temp1, replace;
+file Temp\temp1.dta saved
+
+. clear;
+
+. *PRETEST WRIT;
+. use Baseline\pre_written;
+
+. rename total_1_to_4 pre_math_w;
+
+. rename total_5_to_11 pre_lang_w;
+
+. rename total pre_total_w;
+
+. gen pre_writ=1;
+
+. keep schid childno pre_math_w pre_lang_w pre_total_w pre_writ;
+
+. save Temp\temp2, replace;
+file Temp\temp2.dta saved
+
+. clear;
+
+. *STACK PRETEST;
+. use Temp\temp1;
+
+. append using Temp\temp2;
+
+. sort schid childno;
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. clear;
+
+. ******************************************************************************************************************
+> ;
+. **MID TEST DATA;
+. ******************************************************************************************************************
+> ;
+. use Midline\mid_verbal;
+
+. rename tot_1_to_4 mid_math_v;
+
+. rename tot_5_to_11 mid_lang_v;
+
+. rename total mid_total_v;
+
+. keep schid childno mid_math_v mid_lang_v mid_total_v;
+
+. replace schid=2492 if schid==2493;
+(4 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp3, replace;
+file Temp\temp3.dta saved
+
+. clear;
+
+. *MIDTEST WRIT;
+. use Midline\mid_written;
+
+. rename total_1_to_5 mid_math_w;
+
+. rename total_6_to_16 mid_lang_w;
+
+. rename total mid_total_w;
+
+. gen mid_writ=1;
+
+. keep schid childno mid_math_w mid_lang_w mid_total_w mid_writ;
+
+. replace schid=2492 if schid==2493;
+(2 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp4, replace;
+file Temp\temp4.dta saved
+
+. clear;
+
+. *MERGE POST TEST;
+. use Temp\temp3;
+
+. sort schid childno;
+
+. merge schid childno using Temp\temp4;
+
+. drop _merge;
+
+. ******************************************************************************************************************
+> ;
+. **MERGING PRE AND MID TEST;
+. ******************************************************************************************************************
+> ;
+. sort schid childno;
+
+. merge schid childno using Temp\testdata;
+variables schid childno do not uniquely identify observations in Temp\testdata.dta
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. **FIXING MISTAKES IN THE DATA;
+. replace pre_math_w=56 if schid==4231 & childno==3;
+(1 real change made)
+
+. replace pre_total_v=11 if schid==3511 & childno==17;
+(1 real change made)
+
+. replace pre_total_w=34 if schid==4252 & childno==22;
+(1 real change made)
+
+. gen block = int(schid/1000);
+
+. *MERGING IN TREATMENT STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using treatschool;
+variable schid does not uniquely identify observations in the master data
+
+. gen treat = 0;
+
+. replace treat = 1 if _merge == 3;
+(1546 real changes made)
+
+. **RECODING VARIABLES;
+. for var _all: replace X = . if X == -999;
+
+->  replace schid = . if schid == -999
+(0 real changes made)
+
+->  replace childno = . if childno == -999
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -999
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -999
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -999
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -999
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -999
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -999
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -999
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -999
+(96 real changes made, 96 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -999
+(99 real changes made, 99 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -999
+(196 real changes made, 196 to missing)
+
+->  replace pre_writ = . if pre_writ == -999
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -999
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -999
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -999
+(1 real change made, 1 to missing)
+
+->  replace block = . if block == -999
+(0 real changes made)
+
+->  replace _merge = . if _merge == -999
+(0 real changes made)
+
+->  replace treat = . if treat == -999
+(0 real changes made)
+
+. for var _all: replace X = . if X == -888;
+
+->  replace schid = . if schid == -888
+(0 real changes made)
+
+->  replace childno = . if childno == -888
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -888
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -888
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -888
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -888
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -888
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -888
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -888
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_writ = . if pre_writ == -888
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -888
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -888
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -888
+(0 real changes made)
+
+->  replace block = . if block == -888
+(0 real changes made)
+
+->  replace _merge = . if _merge == -888
+(0 real changes made)
+
+->  replace treat = . if treat == -888
+(0 real changes made)
+
+. for var _all: replace X = . if X == -777;
+
+->  replace schid = . if schid == -777
+(0 real changes made)
+
+->  replace childno = . if childno == -777
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -777
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -777
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -777
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -777
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -777
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -777
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -777
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_writ = . if pre_writ == -777
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -777
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -777
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -777
+(0 real changes made)
+
+->  replace block = . if block == -777
+(0 real changes made)
+
+->  replace _merge = . if _merge == -777
+(0 real changes made)
+
+->  replace treat = . if treat == -777
+(0 real changes made)
+
+. **MERGING IN CLOSURE STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using Temp/tempclose;
+variable schid does not uniquely identify observations in the master data
+
+. drop if treat==.;
+(5 observations deleted)
+
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **SOME SAMPLE STATS;
+. ******************************************************************************************************************
+> ;
+. **CALC SCORES BY SCHID AND LOOKING AT CLOSURES;
+. sort schid close treat;
+
+. collapse (mean) pre_math_v pre_lang_v pre_total_v pre_math_w pre_lang_w pre_total_w 
+> mid_math_v mid_lang_v mid_total_v mid_math_w mid_lang_w mid_total_w, by(schid close treat);
+
+. clear;
+
+. **STUDENT LEVEL DATA;
+. use Temp\test_new.dta;
+
+. **DROPING SCHOOLS WITH NO PRE OR POST DATA THAT WERE BASICALLY NEVER OPEN;
+. drop if schid==1211;
+(1 observation deleted)
+
+. drop if schid==5332;
+(1 observation deleted)
+
+. drop if schid==5711;
+(1 observation deleted)
+
+. drop if schid==1111;
+(0 observations deleted)
+
+. drop if schid==2111;
+(0 observations deleted)
+
+. drop if schid==5221;
+(0 observations deleted)
+
+. drop if schid==5611;
+(0 observations deleted)
+
+. **DROPPING SCHOOL WITHOUT A PRETEST;
+. drop if schid==1113;
+(11 observations deleted)
+
+. drop if schid==5731 & childno==24;
+(2 observations deleted)
+
+. **drop if close==1;
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. *LOOKING AT ENTRY AND EXIT;
+. gen entry=0;
+
+. replace entry=1 if (pre_total_v==. & pre_total_w==.) & mid_total_v!=. ;
+(760 real changes made)
+
+. gen missing=0;
+
+. replace missing=1 if (pre_total_v!=. | pre_total_w!=.) & mid_total_v==. ;
+(371 real changes made)
+
+. gen stayer=0;
+
+. replace stayer=1 if missing==0 & entry==0;
+(1893 real changes made)
+
+. regress entry treat, cluster(schid);
+
+Linear regression                                      Number of obs =    3024
+                                                       F(  1,   112) =    0.38
+                                                       Prob > F      =  0.5395
+                                                       R-squared     =  0.0004
+                                                       Root MSE      =  .43384
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+       entry |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0164832   .0267842     0.62   0.540    -.0365862    .0695527
+       _cons |   .2428958   .0190473    12.75   0.000     .2051561    .2806355
+------------------------------------------------------------------------------
+
+. regress missing treat, cluster(schid);
+
+Linear regression                                      Number of obs =    3024
+                                                       F(  1,   112) =    3.94
+                                                       Prob > F      =  0.0497
+                                                       R-squared     =  0.0145
+                                                       Root MSE      =   .3258
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+     missing |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.0789702   .0398063    -1.98   0.050    -.1578412   -.0000992
+       _cons |   .1630582      .0383     4.26   0.000     .0871717    .2389447
+------------------------------------------------------------------------------
+
+. regress missing treat if stayer==1 | missing==1, cluster(schid);
+
+Linear regression                                      Number of obs =    2264
+                                                       F(  1,   112) =    4.23
+                                                       Prob > F      =  0.0420
+                                                       R-squared     =  0.0189
+                                                       Root MSE      =   .3668
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+     missing |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.1018337   .0495114    -2.06   0.042    -.1999343   -.0037332
+       _cons |   .2153709   .0474608     4.54   0.000     .1213334    .3094083
+------------------------------------------------------------------------------
+
+. **drop if close==1;
+. tab entry;
+
+      entry |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,264       74.87       74.87
+          1 |        760       25.13      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. tab missing;
+
+    missing |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,653       87.73       87.73
+          1 |        371       12.27      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. tab stayer;
+
+     stayer |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,131       37.40       37.40
+          1 |      1,893       62.60      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. drop if entry==1;
+(760 observations deleted)
+
+. **PANEL A/COL 1 and 2;
+. sort treat;
+
+. by treat: sum missing;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     missing |      1119    .2153709    .4112632          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     missing |      1145    .1135371    .3173869          0          1
+
+
+. **PANEL A/COL 3;
+. regress missing treat, cluster(schid);
+
+Linear regression                                      Number of obs =    2264
+                                                       F(  1,   112) =    4.23
+                                                       Prob > F      =  0.0420
+                                                       R-squared     =  0.0189
+                                                       Root MSE      =   .3668
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+     missing |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.1018337   .0495114    -2.06   0.042    -.1999343   -.0037332
+       _cons |   .2153709   .0474608     4.54   0.000     .1213334    .3094083
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELACOL3.csv", bdec(2) se 3aster rde
+> c(2) comma bracket replace;
+
+. program define zscore1;
+  1.         syntax, option1(string);
+  2. sort treat;
+  3. egen m1_`option1'=mean(`option1') if treat==0;
+  4. egen sd1_`option1'=sd(`option1') if treat==0;
+  5. egen m_`option1'=mean(m1_`option1');
+  6. egen sd_`option1'=mean(sd1_`option1');
+  7. gen z_`option1'=(`option1'-m_`option1')/sd_`option1';
+  8. end;
+
+. zscore1, option1(pre_total_v);
+(1145 missing values generated)
+(1145 missing values generated)
+(436 missing values generated)
+
+. zscore1, option1(pre_total_w);
+(1145 missing values generated)
+(1145 missing values generated)
+(1862 missing values generated)
+
+. **PANEL A/COL 1 and 2;
+. sort treat missing;
+
+. by treat missing: sum pre_writ z_pre_total_v z_pre_total_w;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0, missing = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    pre_writ |       878     .191344    .3935834          0          1
+z_pre_tota~v |       685   -.0178144    1.037551  -1.810851   14.86058
+z_pre_tota~w |       168    .0416565    1.018415  -2.316079   1.808205
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0, missing = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    pre_writ |       241    .1576763    .3651957          0          1
+z_pre_tota~v |       203    .0601125    .8609089  -1.810851   1.220319
+z_pre_tota~w |        38   -.1841655    .9036343  -2.189826   1.513613
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1, missing = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    pre_writ |      1015    .1724138    .3779259          0          1
+z_pre_tota~v |       831   -.0837042    .9022436  -1.810851   1.220319
+z_pre_tota~w |       175    .2044234    .8857134  -2.063572   1.808205
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1, missing = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    pre_writ |       130    .1615385    .3694506          0          1
+z_pre_tota~v |       109   -.0324719     .959348  -1.810851   1.220319
+z_pre_tota~w |        21   -.2038366    .9562194   -1.85315   1.513613
+
+
+. gen treat_missing=treat*missing;
+
+. **PANEL A/COL 3;
+. regress pre_writ treat_missing missing treat, cluster(schid);
+
+Linear regression                                      Number of obs =    2264
+                                                       F(  3,   112) =    0.26
+                                                       Prob > F      =  0.8541
+                                                       R-squared     =  0.0010
+                                                       Root MSE      =  .38229
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+    pre_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+treat_miss~g |   .0227923   .0604286     0.38   0.707    -.0969392    .1425237
+     missing |  -.0336676   .0447353    -0.75   0.453    -.1223048    .0549696
+       treat |  -.0189302   .0384434    -0.49   0.623    -.0951009    .0572406
+       _cons |    .191344   .0277172     6.90   0.000     .1364259     .246262
+------------------------------------------------------------------------------
+
+. outreg treat_missing using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELACOL3.csv", bdec(2) se 3a
+> ster rdec(2) comma bracket append;
+
+. regress z_pre_total_v treat_missing missing treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1828
+                                                       F(  3,   112) =    0.94
+                                                       Prob > F      =  0.4260
+                                                       R-squared     =  0.0024
+                                                       Root MSE      =   .9543
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_pre_tota~v |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+treat_miss~g |  -.0266946   .1413488    -0.19   0.851    -.3067593      .25337
+     missing |   .0779269   .0889428     0.88   0.383    -.0983018    .2541556
+       treat |  -.0658898   .0802989    -0.82   0.414    -.2249918    .0932122
+       _cons |  -.0178144    .061989    -0.29   0.774    -.1406377    .1050089
+------------------------------------------------------------------------------
+
+. outreg treat_missing using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELACOL3.csv", bdec(2) se 3a
+> ster rdec(2) comma bracket append;
+
+. regress z_pre_total_w treat_missing missing treat, cluster(schid);
+
+Linear regression                                      Number of obs =     402
+                                                       F(  3,    66) =    1.53
+                                                       Prob > F      =  0.2162
+                                                       R-squared     =  0.0200
+                                                       Root MSE      =  .94869
+
+                                 (Std. Err. adjusted for 67 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_pre_tota~w |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+treat_miss~g |   -.182438   .3367843    -0.54   0.590    -.8548496    .4899735
+     missing |   -.225822   .2205244    -1.02   0.310    -.6661132    .2144692
+       treat |   .1627669   .2019866     0.81   0.423    -.2405123    .5660462
+       _cons |   .0416565   .1553212     0.27   0.789    -.2684523    .3517653
+------------------------------------------------------------------------------
+
+. outreg treat_missing using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELACOL3.csv", bdec(2) se 3a
+> ster rdec(2) comma bracket append;
+
+. save Temp\test_new, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **ADDING SCORES;
+. ******************************************************************************************************************
+> ;
+. clear;
+
+.  use Temp\test_new;
+
+. drop if stayer==0;
+(371 observations deleted)
+
+. replace pre_math_w=pre_math_w/5;
+(343 real changes made)
+
+. replace pre_lang_w=pre_lang_w/5;
+(336 real changes made)
+
+. replace pre_total_w=pre_total_w/5;
+(343 real changes made)
+
+. replace mid_math_w=mid_math_w/5;
+(659 real changes made)
+
+. replace mid_lang_w=mid_lang_w/5;
+(652 real changes made)
+
+. replace mid_total_w=mid_total_w/5;
+(661 real changes made)
+
+. replace pre_math_v=0 if pre_math_v==.;
+(378 real changes made)
+
+. replace pre_lang_v=0 if pre_lang_v==.;
+(455 real changes made)
+
+. replace pre_total_v=0 if pre_total_v==.;
+(377 real changes made)
+
+. replace pre_math_w=0 if pre_math_w==.;
+(1550 real changes made)
+
+. replace pre_lang_w=0 if pre_lang_w==.;
+(1551 real changes made)
+
+. replace pre_total_w=0 if pre_total_w==.;
+(1550 real changes made)
+
+. replace mid_math_v=0 if mid_math_v==.;
+(34 real changes made)
+
+. replace mid_lang_v=0 if mid_lang_v==.;
+(34 real changes made)
+
+. replace mid_total_v=0 if mid_total_v==.;
+(34 real changes made)
+
+. replace mid_math_w=0 if mid_math_w==.;
+(1232 real changes made)
+
+. replace mid_lang_w=0 if mid_lang_w==.;
+(1232 real changes made)
+
+. replace mid_total_w=0 if mid_total_w==.;
+(1232 real changes made)
+
+. gen add_mid_math=mid_math_v+mid_math_w;
+
+. gen add_mid_lang=mid_lang_v+mid_lang_w;
+
+. gen add_mid_total=mid_total_v+mid_total_w;
+
+. ******************************************************************************************************************
+> ;
+. **Normalized scores;
+. ******************************************************************************************************************
+> ;
+. program define zscore;
+  1.         syntax, option1(string);
+  2. sort treat;
+  3. egen m1_`option1'=mean(`option1') if treat==0;
+  4. egen sd1_`option1'=sd(`option1') if treat==0;
+  5. egen m_`option1'=mean(m1_`option1');
+  6. egen sd_`option1'=mean(sd1_`option1');
+  7. gen z_`option1'=(`option1'-m_`option1')/sd_`option1';
+  8. end;
+
+. zscore, option1(add_mid_math);
+(1015 missing values generated)
+(1015 missing values generated)
+
+. zscore, option1(add_mid_lang);
+(1015 missing values generated)
+(1015 missing values generated)
+
+. zscore, option1(add_mid_total);
+(1015 missing values generated)
+(1015 missing values generated)
+
+. replace mid_writ=0 if mid_writ==.;
+(1232 real changes made)
+
+. **PANEL B/COL 1 AND COL 2;
+. sort treat;
+
+. by treat: sum mid_writ z_add_mid_math z_add_mid_lang z_add_mid_total;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    mid_writ |       878     .332574    .4714039          0          1
+z_add_mid_~h |       878    2.78e-08           1  -1.637221   2.294277
+z_add_mid_~g |       878    4.09e-08           1  -1.262772     2.2724
+z_add_mid_~l |       878    2.48e-08           1  -1.483599   2.366517
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    mid_writ |      1015    .3635468    .4812574          0          1
+z_add_mid_~h |      1015    .1369582    1.049465  -1.637221   2.294277
+z_add_mid_~g |      1015    .1375638    1.048359  -1.262772     2.2724
+z_add_mid_~l |      1015    .1423636    1.053515  -1.483599   2.328016
+
+
+. **PANEL B/THIRD COLUMN;
+. regress mid_writ treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    0.59
+                                                       Prob > F      =  0.4450
+                                                       R-squared     =  0.0010
+                                                       Root MSE      =  .47671
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+    mid_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0309728   .0404076     0.77   0.445    -.0490897    .1110352
+       _cons |    .332574   .0286676    11.60   0.000     .2757729    .3893752
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELBCOL3.csv", bdec(2) se 3aster rde
+> c(2) comma bracket replace;
+
+. regress z_add_mid_math treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    1.85
+                                                       Prob > F      =  0.1771
+                                                       R-squared     =  0.0044
+                                                       Root MSE      =  1.0268
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~h |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1369582   .1008243     1.36   0.177    -.0628122    .3367286
+       _cons |   2.78e-08   .0701701     0.00   1.000     -.139033    .1390331
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELBCOL3.csv", bdec(2) se 3aster rde
+> c(2) comma bracket append;
+
+. regress z_add_mid_lang treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    1.74
+                                                       Prob > F      =  0.1893
+                                                       R-squared     =  0.0045
+                                                       Root MSE      =  1.0262
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~g |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1375638   .1041504     1.32   0.189    -.0687968    .3439244
+       _cons |   4.09e-08   .0711572     0.00   1.000    -.1409887    .1409888
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELBCOL3.csv", bdec(2) se 3aster rde
+> c(2) comma bracket append;
+
+. regress z_add_mid_total treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    1.88
+                                                       Prob > F      =  0.1733
+                                                       R-squared     =  0.0047
+                                                       Root MSE      =   1.029
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_mid_~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .1423636   .1038738     1.37   0.173    -.0634491    .3481762
+       _cons |   2.48e-08    .071417     0.00   1.000    -.1415037    .1415037
+------------------------------------------------------------------------------
+
+. outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\TABLE8PANELBCOL3.csv", bdec(2) se 3aster rde
+> c(2) comma bracket append;
+
+. 
+end of do-file
+
+. do "C:\Incentives_Matter_Data\Incentives_FINAL\Programs\Table 8 Post Test.do"
+
+. clear
+
+. *SETTING ENVIRONMENT;
+. #delimit;
+delimiter now ;
+. capture log close;

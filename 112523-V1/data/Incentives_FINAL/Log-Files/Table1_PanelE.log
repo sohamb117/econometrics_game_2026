@@ -1,0 +1,644 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives Matter Data\Incentives FINAL\Log Files\Table1_PanelE.log
+  log type:  text
+ opened on:  25 May 2011, 21:20:38
+
+. cd "C:\Incentives Matter Data\Incentives FINAL\Raw Data\Tests\";
+C:\Incentives Matter Data\Incentives FINAL\Raw Data\Tests
+
+. set more off;
+
+. set mem 400m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. set matsize 500;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. ******************************************************************************************************************
+> ;
+. **Closed School data;
+. ******************************************************************************************************************
+> ;
+. use "Closed School.dta";
+
+. gen close=1 if mon10=="Closed" &  mon11=="Closed";
+(105 missing values generated)
+
+. gen schid=idnum;
+
+. keep schid close;
+
+. sort schid;
+
+. save Temp\tempclose, replace;
+file Temp\tempclose.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **PRE_TEST DATA;
+. ******************************************************************************************************************
+> ;
+. *PRETEST VERBAL;
+. use Baseline\pre_verbal;
+
+. rename total_1_to_4 pre_math_v;
+
+. rename total_5_to_11 pre_lang_v;
+
+. rename total pre_total_v;
+
+. gen pre_writ=0;
+
+. keep schid childno pre_math_v pre_lang_v pre_total_v pre_writ;
+
+. save Temp\temp1, replace;
+file Temp\temp1.dta saved
+
+. clear;
+
+. *PRETEST WRIT;
+. use Baseline\pre_written;
+
+. rename total_1_to_4 pre_math_w;
+
+. rename total_5_to_11 pre_lang_w;
+
+. rename total pre_total_w;
+
+. gen pre_writ=1;
+
+. keep schid childno pre_math_w pre_lang_w pre_total_w pre_writ;
+
+. save Temp\temp2, replace;
+file Temp\temp2.dta saved
+
+. clear;
+
+. *STACK PRETEST;
+. use Temp\temp1;
+
+. append using Temp\temp2;
+
+. sort schid childno;
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. clear;
+
+. ******************************************************************************************************************
+> ;
+. **MID TEST DATA;
+. ******************************************************************************************************************
+> ;
+. use Midline\mid_verbal;
+
+. rename tot_1_to_4 mid_math_v;
+
+. rename tot_5_to_11 mid_lang_v;
+
+. rename total mid_total_v;
+
+. keep schid childno mid_math_v mid_lang_v mid_total_v;
+
+. replace schid=2492 if schid==2493;
+(4 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp3, replace;
+file Temp\temp3.dta saved
+
+. clear;
+
+. *MIDTEST WRIT;
+. use Midline\mid_written;
+
+. rename total_1_to_5 mid_math_w;
+
+. rename total_6_to_16 mid_lang_w;
+
+. rename total mid_total_w;
+
+. gen mid_writ=1;
+
+. keep schid childno mid_math_w mid_lang_w mid_total_w mid_writ;
+
+. replace schid=2492 if schid==2493;
+(2 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp4, replace;
+file Temp\temp4.dta saved
+
+. clear;
+
+. *MERGE POST TEST;
+. use Temp\temp3;
+
+. sort schid childno;
+
+. merge schid childno using Temp\temp4;
+
+. drop _merge;
+
+. ******************************************************************************************************************
+> ;
+. **MERGING PRE AND MID TEST;
+. ******************************************************************************************************************
+> ;
+. sort schid childno;
+
+. merge schid childno using Temp\testdata;
+variables schid childno do not uniquely identify observations in Temp\testdata.dta
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. **FIXING MISTAKES IN THE DATA;
+. replace pre_math_w=56 if schid==4231 & childno==3;
+(1 real change made)
+
+. replace pre_total_v=11 if schid==3511 & childno==17;
+(1 real change made)
+
+. replace pre_total_w=34 if schid==4252 & childno==22;
+(1 real change made)
+
+. gen block = int(schid/1000);
+
+. *MERGING IN TREATMENT STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using treatschool;
+variable schid does not uniquely identify observations in the master data
+
+. gen treat = 0;
+
+. replace treat = 1 if _merge == 3;
+(1546 real changes made)
+
+. **RECODING VARIABLES;
+. for var _all: replace X = . if X == -999;
+
+->  replace schid = . if schid == -999
+(0 real changes made)
+
+->  replace childno = . if childno == -999
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -999
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -999
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -999
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -999
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -999
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -999
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -999
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -999
+(96 real changes made, 96 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -999
+(99 real changes made, 99 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -999
+(196 real changes made, 196 to missing)
+
+->  replace pre_writ = . if pre_writ == -999
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -999
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -999
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -999
+(1 real change made, 1 to missing)
+
+->  replace block = . if block == -999
+(0 real changes made)
+
+->  replace _merge = . if _merge == -999
+(0 real changes made)
+
+->  replace treat = . if treat == -999
+(0 real changes made)
+
+. for var _all: replace X = . if X == -888;
+
+->  replace schid = . if schid == -888
+(0 real changes made)
+
+->  replace childno = . if childno == -888
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -888
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -888
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -888
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -888
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -888
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -888
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -888
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_writ = . if pre_writ == -888
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -888
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -888
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -888
+(0 real changes made)
+
+->  replace block = . if block == -888
+(0 real changes made)
+
+->  replace _merge = . if _merge == -888
+(0 real changes made)
+
+->  replace treat = . if treat == -888
+(0 real changes made)
+
+. for var _all: replace X = . if X == -777;
+
+->  replace schid = . if schid == -777
+(0 real changes made)
+
+->  replace childno = . if childno == -777
+(0 real changes made)
+
+->  replace mid_math_v = . if mid_math_v == -777
+(0 real changes made)
+
+->  replace mid_lang_v = . if mid_lang_v == -777
+(0 real changes made)
+
+->  replace mid_total_v = . if mid_total_v == -777
+(0 real changes made)
+
+->  replace mid_math_w = . if mid_math_w == -777
+(0 real changes made)
+
+->  replace mid_lang_w = . if mid_lang_w == -777
+(0 real changes made)
+
+->  replace mid_total_w = . if mid_total_w == -777
+(0 real changes made)
+
+->  replace mid_writ = . if mid_writ == -777
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_writ = . if pre_writ == -777
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -777
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -777
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -777
+(0 real changes made)
+
+->  replace block = . if block == -777
+(0 real changes made)
+
+->  replace _merge = . if _merge == -777
+(0 real changes made)
+
+->  replace treat = . if treat == -777
+(0 real changes made)
+
+. **MERGING IN CLOSURE STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using Temp\tempclose;
+variable schid does not uniquely identify observations in the master data
+
+. drop if treat==.;
+(5 observations deleted)
+
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **SOME SAMPLE STATS;
+. ******************************************************************************************************************
+> ;
+. **CALC SCORES BY SCHID AND LOOKING AT CLOSURES;
+. sort schid close treat;
+
+. collapse (mean) pre_math_v pre_lang_v pre_total_v pre_math_w pre_lang_w pre_total_w 
+> mid_math_v mid_lang_v mid_total_v mid_math_w mid_lang_w mid_total_w, by(schid close treat);
+
+. clear;
+
+. **STUDENT LEVEL DATA;
+. use Temp\test_new.dta;
+
+. **DROPING SCHOOLS WITH NO PRE OR POST DATA THAT WERE BASICALLY NEVER OPEN;
+. drop if schid==1211;
+(1 observation deleted)
+
+. drop if schid==5332;
+(1 observation deleted)
+
+. drop if schid==5711;
+(1 observation deleted)
+
+. drop if schid==1111;
+(0 observations deleted)
+
+. drop if schid==2111;
+(0 observations deleted)
+
+. drop if schid==5221;
+(0 observations deleted)
+
+. drop if schid==5611;
+(0 observations deleted)
+
+. drop if schid==1113;
+(11 observations deleted)
+
+. drop if schid==5731 & childno==24;
+(2 observations deleted)
+
+. **drop if close==1;
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. *LOOKING AT ENTRY AND EXIT;
+. gen entry=0;
+
+. replace entry=1 if (pre_total_v==. & pre_total_w==.) & mid_total_v!=. ;
+(760 real changes made)
+
+. gen missing=0;
+
+. replace missing=1 if (pre_total_v!=. | pre_total_w!=.) & mid_total_v==. ;
+(371 real changes made)
+
+. gen stayer=0;
+
+. replace stayer=1 if missing==0 & entry==0;
+(1893 real changes made)
+
+. tab entry;
+
+      entry |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,264       74.87       74.87
+          1 |        760       25.13      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. tab missing;
+
+    missing |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,653       87.73       87.73
+          1 |        371       12.27      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. tab stayer;
+
+     stayer |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,131       37.40       37.40
+          1 |      1,893       62.60      100.00
+------------+-----------------------------------
+      Total |      3,024      100.00
+
+. **drop if close==1;
+. save Temp\test_new, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **ADDING SCORES;
+. ******************************************************************************************************************
+> ;
+. drop if stayer==0;
+(1131 observations deleted)
+
+. replace pre_math_w=pre_math_w/5;
+(343 real changes made)
+
+. replace pre_lang_w=pre_lang_w/5;
+(336 real changes made)
+
+. replace pre_total_w=pre_total_w/5;
+(343 real changes made)
+
+. replace mid_math_w=mid_math_w/5;
+(659 real changes made)
+
+. replace mid_lang_w=mid_lang_w/5;
+(652 real changes made)
+
+. replace mid_total_w=mid_total_w/5;
+(661 real changes made)
+
+. replace pre_math_v=0 if pre_math_v==.;
+(378 real changes made)
+
+. replace pre_lang_v=0 if pre_lang_v==.;
+(455 real changes made)
+
+. replace pre_total_v=0 if pre_total_v==.;
+(377 real changes made)
+
+. replace pre_math_w=0 if pre_math_w==.;
+(1550 real changes made)
+
+. replace pre_lang_w=0 if pre_lang_w==.;
+(1551 real changes made)
+
+. replace pre_total_w=0 if pre_total_w==.;
+(1550 real changes made)
+
+. replace mid_math_v=0 if mid_math_v==.;
+(34 real changes made)
+
+. replace mid_lang_v=0 if mid_lang_v==.;
+(34 real changes made)
+
+. replace mid_total_v=0 if mid_total_v==.;
+(34 real changes made)
+
+. replace mid_math_w=0 if mid_math_w==.;
+(1232 real changes made)
+
+. replace mid_lang_w=0 if mid_lang_w==.;
+(1232 real changes made)
+
+. replace mid_total_w=0 if mid_total_w==.;
+(1232 real changes made)
+
+. gen add_mid_math=mid_math_v+mid_math_w;
+
+. gen add_mid_lang=mid_lang_v+mid_lang_w;
+
+. gen add_mid_total=mid_total_v+mid_total_w;
+
+. sort treat;
+
+. by treat: sum pre_math_w pre_lang_w pre_total_w;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  pre_math_w |       878    1.534624    3.383609          0         12
+  pre_lang_w |       878    .6851936    1.759272          0          8
+ pre_total_w |       878    2.220501    5.032097          0         20
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+  pre_math_w |      1015    1.507389     3.44382          0         12
+  pre_lang_w |      1015    .6403941    1.678141          0        8.8
+ pre_total_w |      1015    2.134187     4.99246          0         20
+
+
+. regress pre_math_w treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    0.01
+                                                       Prob > F      =  0.9401
+                                                       R-squared     =  0.0000
+                                                       Root MSE      =   3.416
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  pre_math_w |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   -.027235   .3618762    -0.08   0.940    -.7442462    .6897763
+       _cons |   1.534624   .2445416     6.28   0.000     1.050096    2.019152
+------------------------------------------------------------------------------
+
+. regress pre_lang_w treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    0.06
+                                                       Prob > F      =  0.8096
+                                                       R-squared     =  0.0002
+                                                       Root MSE      =  1.7162
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+  pre_lang_w |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.0447995   .1855042    -0.24   0.810    -.4123523    .3227533
+       _cons |   .6851936   .1322449     5.18   0.000     .4231673      .94722
+------------------------------------------------------------------------------
+
+. regress pre_total_w treat, cluster(schid);
+
+Linear regression                                      Number of obs =    1893
+                                                       F(  1,   112) =    0.03
+                                                       Prob > F      =  0.8727
+                                                       R-squared     =  0.0001
+                                                       Root MSE      =  5.0109
+
+                                (Std. Err. adjusted for 113 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+ pre_total_w |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   -.086314   .5372569    -0.16   0.873     -1.15082    .9781917
+       _cons |   2.220501   .3711278     5.98   0.000     1.485159    2.955843
+------------------------------------------------------------------------------
+
+. diestata
+> 
+> 
+> program define zscore1;
+unrecognized command:  diestata
+r(199);
+
+end of do-file
+
+r(199);
+
+. exit, clear

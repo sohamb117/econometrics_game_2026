@@ -1,0 +1,592 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+       log:  {res}C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table1PanelE.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 1 Jun 2011, 14:13:30
+{txt}
+{com}. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests";
+{res}C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests
+{txt}
+{com}. set more off;
+{txt}
+{com}. set mem 400m;
+{txt}
+{title:Current memory allocation}
+
+{col 21}current{col 61}memory usage
+{col 5}settable{col 23}value{col 33}description{col 61}(1M = 1024k)
+{col 5}{hline 68}
+{col 5}set maxvar{col 22}{res:  5000}{col 33}max. variables allowed           1.909M
+{col 5}set memory          {res:400M}{col 33}max. data space                400.000M
+{col 5}set matsize{col 21}{res:    150}{col 33}max. RHS vars in models          0.184M
+{col 61}{hline 11}
+{col 55}         402.093M
+
+{com}. set matsize 500;
+{txt}
+{title:Current memory allocation}
+
+{col 21}current{col 61}memory usage
+{col 5}settable{col 23}value{col 33}description{col 61}(1M = 1024k)
+{col 5}{hline 68}
+{col 5}set maxvar{col 22}{res:  5000}{col 33}max. variables allowed           1.909M
+{col 5}set memory          {res:400M}{col 33}max. data space                400.000M
+{col 5}set matsize{col 21}{res:    500}{col 33}max. RHS vars in models          1.949M
+{col 61}{hline 11}
+{col 55}         403.858M
+
+{com}. ******************************************************************************************************************;
+. **Closed School data;
+. ******************************************************************************************************************;
+. use "Closed School.dta";
+{txt}
+{com}. gen close=1 if mon10=="Closed" &  mon11=="Closed";
+{txt}(105 missing values generated)
+
+{com}. gen schid=idnum;
+{txt}
+{com}. keep schid close;
+{txt}
+{com}. sort schid;
+{txt}
+{com}. save Temp\tempclose, replace;
+{txt}file Temp\tempclose.dta saved
+
+{com}. ******************************************************************************************************************;
+. **PRE_TEST DATA;
+. ******************************************************************************************************************;
+. *PRETEST VERBAL;
+. use Baseline\pre_verbal;
+{txt}
+{com}. rename total_1_to_4 pre_math_v;
+{txt}
+{com}. rename total_5_to_11 pre_lang_v;
+{txt}
+{com}. rename total pre_total_v;
+{txt}
+{com}. gen pre_writ=0;
+{txt}
+{com}. keep schid childno pre_math_v pre_lang_v pre_total_v pre_writ;
+{txt}
+{com}. save Temp\temp1, replace;
+{txt}file Temp\temp1.dta saved
+
+{com}. clear;
+{txt}
+{com}. *PRETEST WRIT;
+. use Baseline\pre_written;
+{txt}
+{com}. rename total_1_to_4 pre_math_w;
+{txt}
+{com}. rename total_5_to_11 pre_lang_w;
+{txt}
+{com}. rename total pre_total_w;
+{txt}
+{com}. gen pre_writ=1;
+{txt}
+{com}. keep schid childno pre_math_w pre_lang_w pre_total_w pre_writ;
+{txt}
+{com}. save Temp\temp2, replace;
+{txt}file Temp\temp2.dta saved
+
+{com}. clear;
+{txt}
+{com}. *STACK PRETEST;
+. use Temp\temp1;
+{txt}
+{com}. append using Temp\temp2;
+{txt}
+{com}. sort schid childno;
+{txt}
+{com}. save Temp\testdata, replace;
+{txt}file Temp\testdata.dta saved
+
+{com}. clear;
+{txt}
+{com}. ******************************************************************************************************************;
+. **MID TEST DATA;
+. ******************************************************************************************************************;
+. use Midline\mid_verbal;
+{txt}
+{com}. rename tot_1_to_4 mid_math_v;
+{txt}
+{com}. rename tot_5_to_11 mid_lang_v;
+{txt}
+{com}. rename total mid_total_v;
+{txt}
+{com}. keep schid childno mid_math_v mid_lang_v mid_total_v;
+{txt}
+{com}. replace schid=2492 if schid==2493;
+{txt}(4 real changes made)
+
+{com}. sort schid childno;
+{txt}
+{com}. save Temp\temp3, replace;
+{txt}file Temp\temp3.dta saved
+
+{com}. clear;
+{txt}
+{com}. *MIDTEST WRIT;
+. use Midline\mid_written;
+{txt}
+{com}. rename total_1_to_5 mid_math_w;
+{txt}
+{com}. rename total_6_to_16 mid_lang_w;
+{txt}
+{com}. rename total mid_total_w;
+{txt}
+{com}. gen mid_writ=1;
+{txt}
+{com}. keep schid childno mid_math_w mid_lang_w mid_total_w mid_writ;
+{txt}
+{com}. replace schid=2492 if schid==2493;
+{txt}(2 real changes made)
+
+{com}. sort schid childno;
+{txt}
+{com}. save Temp\temp4, replace;
+{txt}file Temp\temp4.dta saved
+
+{com}. clear;
+{txt}
+{com}. *MERGE TEST;
+. use Temp\temp3;
+{txt}
+{com}. sort schid childno;
+{txt}
+{com}. merge schid childno using Temp\temp4;
+{txt}
+{com}. drop _merge;
+{txt}
+{com}. ******************************************************************************************************************;
+. **MERGING PRE AND MID TEST;
+. ******************************************************************************************************************;
+. sort schid childno;
+{txt}
+{com}. merge schid childno using Temp\testdata;
+{txt}{p 0 4}
+variable{txt}s{txt} schid
+childno
+do not uniquely identify observations in
+Temp\testdata.dta
+{p_end}
+
+{com}. save Temp\testdata, replace;
+{txt}file Temp\testdata.dta saved
+
+{com}. **FIXING MISTAKES IN THE DATA;
+. replace pre_math_w=56 if schid==4231 & childno==3;
+{txt}(1 real change made)
+
+{com}. replace pre_total_v=11 if schid==3511 & childno==17;
+{txt}(1 real change made)
+
+{com}. replace pre_total_w=34 if schid==4252 & childno==22;
+{txt}(1 real change made)
+
+{com}. gen block = int(schid/1000);
+{txt}
+{com}. *MERGING IN TREATMENT STATUS;
+. drop _merge;
+{txt}
+{com}. sort schid;
+{txt}
+{com}. merge schid using treatschool;
+{txt}{p 0 4}
+variable{txt} schid
+does not uniquely identify observations in
+the master data
+{p_end}
+
+{com}. gen treat = 0;
+{txt}
+{com}. replace treat = 1 if _merge == 3;
+{txt}(1546 real changes made)
+
+{com}. **RECODING VARIABLES;
+. for var _all: replace X = . if X == -999;
+
+{res}->  replace schid = . if schid == -999
+{txt}(0 real changes made)
+
+{res}->  replace childno = . if childno == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_math_v = . if mid_math_v == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_lang_v = . if mid_lang_v == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_total_v = . if mid_total_v == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_math_w = . if mid_math_w == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_lang_w = . if mid_lang_w == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_total_w = . if mid_total_w == -999
+{txt}(0 real changes made)
+
+{res}->  replace mid_writ = . if mid_writ == -999
+{txt}(0 real changes made)
+
+{res}->  replace pre_total_v = . if pre_total_v == -999
+{txt}(96 real changes made, 96 to missing)
+
+{res}->  replace pre_math_v = . if pre_math_v == -999
+{txt}(99 real changes made, 99 to missing)
+
+{res}->  replace pre_lang_v = . if pre_lang_v == -999
+{txt}(196 real changes made, 196 to missing)
+
+{res}->  replace pre_writ = . if pre_writ == -999
+{txt}(0 real changes made)
+
+{res}->  replace pre_total_w = . if pre_total_w == -999
+{txt}(0 real changes made)
+
+{res}->  replace pre_math_w = . if pre_math_w == -999
+{txt}(0 real changes made)
+
+{res}->  replace pre_lang_w = . if pre_lang_w == -999
+{txt}(1 real change made, 1 to missing)
+
+{res}->  replace block = . if block == -999
+{txt}(0 real changes made)
+
+{res}->  replace _merge = . if _merge == -999
+{txt}(0 real changes made)
+
+{res}->  replace treat = . if treat == -999
+{txt}(0 real changes made)
+
+{com}. for var _all: replace X = . if X == -888;
+
+{res}->  replace schid = . if schid == -888
+{txt}(0 real changes made)
+
+{res}->  replace childno = . if childno == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_math_v = . if mid_math_v == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_lang_v = . if mid_lang_v == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_total_v = . if mid_total_v == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_math_w = . if mid_math_w == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_lang_w = . if mid_lang_w == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_total_w = . if mid_total_w == -888
+{txt}(0 real changes made)
+
+{res}->  replace mid_writ = . if mid_writ == -888
+{txt}(0 real changes made)
+
+{res}->  replace pre_total_v = . if pre_total_v == -888
+{txt}(2 real changes made, 2 to missing)
+
+{res}->  replace pre_math_v = . if pre_math_v == -888
+{txt}(2 real changes made, 2 to missing)
+
+{res}->  replace pre_lang_v = . if pre_lang_v == -888
+{txt}(2 real changes made, 2 to missing)
+
+{res}->  replace pre_writ = . if pre_writ == -888
+{txt}(0 real changes made)
+
+{res}->  replace pre_total_w = . if pre_total_w == -888
+{txt}(0 real changes made)
+
+{res}->  replace pre_math_w = . if pre_math_w == -888
+{txt}(0 real changes made)
+
+{res}->  replace pre_lang_w = . if pre_lang_w == -888
+{txt}(0 real changes made)
+
+{res}->  replace block = . if block == -888
+{txt}(0 real changes made)
+
+{res}->  replace _merge = . if _merge == -888
+{txt}(0 real changes made)
+
+{res}->  replace treat = . if treat == -888
+{txt}(0 real changes made)
+
+{com}. for var _all: replace X = . if X == -777;
+
+{res}->  replace schid = . if schid == -777
+{txt}(0 real changes made)
+
+{res}->  replace childno = . if childno == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_math_v = . if mid_math_v == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_lang_v = . if mid_lang_v == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_total_v = . if mid_total_v == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_math_w = . if mid_math_w == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_lang_w = . if mid_lang_w == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_total_w = . if mid_total_w == -777
+{txt}(0 real changes made)
+
+{res}->  replace mid_writ = . if mid_writ == -777
+{txt}(0 real changes made)
+
+{res}->  replace pre_total_v = . if pre_total_v == -777
+{txt}(6 real changes made, 6 to missing)
+
+{res}->  replace pre_math_v = . if pre_math_v == -777
+{txt}(6 real changes made, 6 to missing)
+
+{res}->  replace pre_lang_v = . if pre_lang_v == -777
+{txt}(6 real changes made, 6 to missing)
+
+{res}->  replace pre_writ = . if pre_writ == -777
+{txt}(0 real changes made)
+
+{res}->  replace pre_total_w = . if pre_total_w == -777
+{txt}(0 real changes made)
+
+{res}->  replace pre_math_w = . if pre_math_w == -777
+{txt}(0 real changes made)
+
+{res}->  replace pre_lang_w = . if pre_lang_w == -777
+{txt}(0 real changes made)
+
+{res}->  replace block = . if block == -777
+{txt}(0 real changes made)
+
+{res}->  replace _merge = . if _merge == -777
+{txt}(0 real changes made)
+
+{res}->  replace treat = . if treat == -777
+{txt}(0 real changes made)
+
+{com}. **MERGING IN CLOSURE STATUS;
+. drop _merge;
+{txt}
+{com}. sort schid;
+{txt}
+{com}. merge schid using Temp\tempclose;
+{txt}{p 0 4}
+variable{txt} schid
+does not uniquely identify observations in
+the master data
+{p_end}
+
+{com}. drop if treat==.;
+{txt}(5 observations deleted)
+
+{com}. save Temp\test_new.dta, replace;
+{txt}file Temp\test_new.dta saved
+
+{com}. **DROPING SCHOOLS WITH NO PRE OR POST DATA THAT WERE BASICALLY NEVER OPEN;
+. drop if schid==1211;
+{txt}(1 observation deleted)
+
+{com}. drop if schid==5332;
+{txt}(1 observation deleted)
+
+{com}. drop if schid==5711;
+{txt}(1 observation deleted)
+
+{com}. drop if schid==1111;
+{txt}(0 observations deleted)
+
+{com}. drop if schid==2111;
+{txt}(0 observations deleted)
+
+{com}. drop if schid==5221;
+{txt}(0 observations deleted)
+
+{com}. drop if schid==5611;
+{txt}(0 observations deleted)
+
+{com}. **DROPPING SCHOOL WITHOUT A PRETEST;
+. drop if schid==1113;
+{txt}(11 observations deleted)
+
+{com}. drop if schid==5731 & childno==24;
+{txt}(2 observations deleted)
+
+{com}. **drop if close==1;
+. save Temp\test_new.dta, replace;
+{txt}file Temp\test_new.dta saved
+
+{com}. *LOOKING AT ENTRY AND EXIT;
+. gen entry=0;
+{txt}
+{com}. replace entry=1 if (pre_total_v==. & pre_total_w==.) & mid_total_v!=. ;
+{txt}(760 real changes made)
+
+{com}. gen missing=0;
+{txt}
+{com}. replace missing=1 if (pre_total_v!=. | pre_total_w!=.) & mid_total_v==. ;
+{txt}(371 real changes made)
+
+{com}. gen stayer=0;
+{txt}
+{com}. replace stayer=1 if missing==0 & entry==0;
+{txt}(1893 real changes made)
+
+{com}. gen treat_missing=treat*missing;
+{txt}
+{com}. save Temp\test_new, replace;
+{txt}file Temp\test_new.dta saved
+
+{com}. ******************************************************************************************************************;
+. **ADDING SCORES;
+. ******************************************************************************************************************;
+. *drop if stayer==0;
+. replace pre_math_w=pre_math_w/5;
+{txt}(402 real changes made)
+
+{com}. replace pre_lang_w=pre_lang_w/5;
+{txt}(394 real changes made)
+
+{com}. replace pre_total_w=pre_total_w/5;
+{txt}(402 real changes made)
+
+{com}. program define zscore1;
+{txt}  1{com}.         syntax, option1(string);
+{txt}  2{com}. sort treat;
+{txt}  3{com}. egen m1_`option1'=mean(`option1') if treat==0;
+{txt}  4{com}. egen sd1_`option1'=sd(`option1') if treat==0;
+{txt}  5{com}. egen m_`option1'=mean(m1_`option1');
+{txt}  6{com}. egen sd_`option1'=mean(sd1_`option1');
+{txt}  7{com}. gen z_`option1'=(`option1'-m_`option1')/sd_`option1';
+{txt}  8{com}. end;
+{txt}
+{com}. zscore1, option1(pre_math_w);
+{txt}(1546 missing values generated)
+(1546 missing values generated)
+(2622 missing values generated)
+
+{com}. zscore1, option1(pre_lang_w);
+{txt}(1546 missing values generated)
+(1546 missing values generated)
+(2623 missing values generated)
+
+{com}. zscore1, option1(pre_total_w);
+{txt}(1546 missing values generated)
+(1546 missing values generated)
+(2622 missing values generated)
+
+{com}. zscore1, option1(pre_total_v);
+{txt}(1546 missing values generated)
+(1546 missing values generated)
+(1196 missing values generated)
+
+{com}. replace pre_writ=. if z_pre_total_v==. & z_pre_total_w==.;
+{txt}(104 real changes made, 104 to missing)
+
+{com}. **TABLE 1 PANEL E;
+. sort treat;
+{txt}
+{com}. by treat: sum pre_writ z_pre_total_v z_pre_total_w;
+
+{txt}{hline}
+-> treat = 0
+
+    Variable {c |}       Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 56}
+    pre_writ {c |}{res}      1094    .1882998    .3911302          0          1
+{txt}z_pre_tota~v {c |}{res}       888   -1.98e-08           1  -1.810851   14.86058
+{txt}z_pre_tota~w {c |}{res}       206   -6.80e-08           1  -2.316079   1.808205
+
+{txt}{hline}
+-> treat = 1
+
+    Variable {c |}       Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 56}
+    pre_writ {c |}{res}      1136    .1725352    .3780114          0          1
+{txt}z_pre_tota~v {c |}{res}       940   -.0777634    .9086654  -1.810851   1.220319
+{txt}z_pre_tota~w {c |}{res}       196    .1606812    .8998953  -2.063572   1.808205
+
+{txt}
+{com}. regress pre_writ treat, cluster(schid);
+
+{txt}Linear regression                                      Number of obs ={res}    2230
+                                                       {txt}F(  1,   112) ={res}    0.20
+                                                       {txt}Prob > F      = {res} 0.6592
+                                                       {txt}R-squared     = {res} 0.0004
+                                                       {txt}Root MSE      = {res}  .3845
+
+                                {txt}(Std. Err. adjusted for {res}113{txt} clusters in schid)
+{hline 13}{c TT}{hline 64}
+             {c |}               Robust
+    pre_writ {c |}      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+{hline 13}{char +}{hline 64}
+       treat {c |}  {res}-.0157646   .0356513    -0.44   0.659     -.086403    .0548738
+{txt}       _cons {c |}  {res} .1882998   .0253162     7.44   0.000      .138139    .2384606
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}. regress z_pre_total_v treat, cluster(schid);
+
+{txt}Linear regression                                      Number of obs ={res}    1828
+                                                       {txt}F(  1,   112) ={res}    1.14
+                                                       {txt}Prob > F      = {res} 0.2884
+                                                       {txt}R-squared     = {res} 0.0017
+                                                       {txt}Root MSE      = {res} .95412
+
+                                {txt}(Std. Err. adjusted for {res}113{txt} clusters in schid)
+{hline 13}{c TT}{hline 64}
+             {c |}               Robust
+z_pre_tota~v {c |}      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+{hline 13}{char +}{hline 64}
+       treat {c |}  {res}-.0777634   .0729036    -1.07   0.288    -.2222125    .0666857
+{txt}       _cons {c |}  {res}-1.98e-08   .0526915    -0.00   1.000    -.1044014    .1044014
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}. regress z_pre_total_w treat, cluster(schid);
+
+{txt}Linear regression                                      Number of obs ={res}     402
+                                                       {txt}F(  1,    66) ={res}    0.72
+                                                       {txt}Prob > F      = {res} 0.3981
+                                                       {txt}R-squared     = {res} 0.0071
+                                                       {txt}Root MSE      = {res} .95251
+
+                                 {txt}(Std. Err. adjusted for {res}67{txt} clusters in schid)
+{hline 13}{c TT}{hline 64}
+             {c |}               Robust
+z_pre_tota~w {c |}      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+{hline 13}{char +}{hline 64}
+       treat {c |}  {res} .1606813    .188931     0.85   0.398    -.2165315    .5378941
+{txt}       _cons {c |}  {res}-6.80e-08   .1389035    -0.00   1.000    -.2773299    .2773297
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}. 
+{txt}end of do-file
+
+{com}. 
+. *****************************************************************************************
+. **TABLE 2
+. do "C:\Incentives_Matter_Data\Incentives_FINAL\Programs\Table 2.do"
+{txt}
+{com}. *SETTING ENVIRONMENT;
+. #delimit;
+{txt}delimiter now ;
+{com}. clear;
+{txt}
+{com}. capture log close;
+{smcl}
+{com}{sf}{ul off}

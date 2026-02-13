@@ -1,0 +1,8 @@
+,(1),(2),(3)
+,drop,,
+treat,0.08,0.10,-0.02
+,[0.04]**,[0.03]***,[0.03]
+Observations,2197,2197,2197
+R-squared,0.01,0.02,0.00
+Robust standard errors in brackets,,,
+* significant at 10%; ** significant at 5%; *** significant at 1%,,,

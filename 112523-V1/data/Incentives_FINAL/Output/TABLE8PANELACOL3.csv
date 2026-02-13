@@ -1,0 +1,12 @@
+,(1),(2),(3),(4)
+,missing,,,
+treat,-0.10,,,
+,[0.05]**,,,
+treat_missing,,0.02,-0.03,-0.18
+,,[0.06],[0.14],[0.34]
+Constant,0.22,0.19,-0.02,0.04
+,[0.05]***,[0.03]***,[0.06],[0.16]
+Observations,2264,2264,1828,402
+R-squared,0.02,0.00,0.00,0.02
+Robust standard errors in brackets,,,,
+* significant at 10%; ** significant at 5%; *** significant at 1%,,,,

@@ -1,0 +1,2237 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table_11_Post.log
+  log type:  text
+ opened on:   1 Jun 2011, 14:15:39
+
+. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests";
+C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests
+
+. set more off;
+
+. set mem 400m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. set matsize 500;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          400M    max. data space                400.000M
+    set matsize         500     max. RHS vars in models          1.949M
+                                                            -----------
+                                                               403.858M
+
+. ******************************************************************************************************************
+> ;
+. **Closed School data;
+. ******************************************************************************************************************
+> ;
+. use "Closed School.dta";
+
+. gen close=1 if mon10=="Closed" &  mon11=="Closed";
+(105 missing values generated)
+
+. gen schid=idnum;
+
+. keep schid close;
+
+. sort schid;
+
+. save Temp\tempclose, replace;
+file Temp\tempclose.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **PRE_TEST DATA;
+. ******************************************************************************************************************
+> ;
+. *PRETEST VERBAL;
+. use Baseline\pre_verbal;
+
+. rename total_1_to_4 pre_math_v;
+
+. rename total_5_to_11 pre_lang_v;
+
+. rename total pre_total_v;
+
+. gen pre_writ=0;
+
+. keep schid childno pre_math_v pre_lang_v pre_total_v pre_writ;
+
+. save Temp\temp1, replace;
+file Temp\temp1.dta saved
+
+. clear;
+
+. *PRETEST WRIT;
+. use Baseline\pre_written;
+
+. rename total_1_to_4 pre_math_w;
+
+. rename total_5_to_11 pre_lang_w;
+
+. rename total pre_total_w;
+
+. gen pre_writ=1;
+
+. keep schid childno pre_math_w pre_lang_w pre_total_w pre_writ;
+
+. save Temp\temp2, replace;
+file Temp\temp2.dta saved
+
+. clear;
+
+. *STACK PRETEST;
+. use Temp\temp1;
+
+. append using Temp\temp2;
+
+. sort schid childno;
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. clear;
+
+. ******************************************************************************************************************
+> ;
+. **Post TEST DATA;
+. ******************************************************************************************************************
+> ;
+. use Endline\post_verbal;
+
+. for var _all: replace X = 0 if X == -999;
+
+->  replace idnum = 0 if idnum == -999
+(0 real changes made)
+
+->  replace childno = 0 if childno == -999
+(0 real changes made)
+
+->  replace evalcode = 0 if evalcode == -999
+(0 real changes made)
+
+->  replace ques1 = 0 if ques1 == -999
+(0 real changes made)
+
+->  replace ques2 = 0 if ques2 == -999
+(0 real changes made)
+
+->  replace ques3 = 0 if ques3 == -999
+(0 real changes made)
+
+->  replace ques4 = 0 if ques4 == -999
+(0 real changes made)
+
+->  replace ques5 = 0 if ques5 == -999
+(0 real changes made)
+
+->  replace ques6 = 0 if ques6 == -999
+(0 real changes made)
+
+->  replace ques7 = 0 if ques7 == -999
+(0 real changes made)
+
+->  replace ques8 = 0 if ques8 == -999
+(0 real changes made)
+
+->  replace ques9 = 0 if ques9 == -999
+(0 real changes made)
+
+->  replace ques10 = 0 if ques10 == -999
+(0 real changes made)
+
+. for var _all: replace X = 0 if X == -888;
+
+->  replace idnum = 0 if idnum == -888
+(0 real changes made)
+
+->  replace childno = 0 if childno == -888
+(0 real changes made)
+
+->  replace evalcode = 0 if evalcode == -888
+(0 real changes made)
+
+->  replace ques1 = 0 if ques1 == -888
+(0 real changes made)
+
+->  replace ques2 = 0 if ques2 == -888
+(0 real changes made)
+
+->  replace ques3 = 0 if ques3 == -888
+(0 real changes made)
+
+->  replace ques4 = 0 if ques4 == -888
+(0 real changes made)
+
+->  replace ques5 = 0 if ques5 == -888
+(0 real changes made)
+
+->  replace ques6 = 0 if ques6 == -888
+(0 real changes made)
+
+->  replace ques7 = 0 if ques7 == -888
+(0 real changes made)
+
+->  replace ques8 = 0 if ques8 == -888
+(0 real changes made)
+
+->  replace ques9 = 0 if ques9 == -888
+(0 real changes made)
+
+->  replace ques10 = 0 if ques10 == -888
+(0 real changes made)
+
+. for var _all: replace X = 0 if X == -777;
+
+->  replace idnum = 0 if idnum == -777
+(0 real changes made)
+
+->  replace childno = 0 if childno == -777
+(0 real changes made)
+
+->  replace evalcode = 0 if evalcode == -777
+(1023 real changes made)
+
+->  replace ques1 = 0 if ques1 == -777
+(170 real changes made)
+
+->  replace ques2 = 0 if ques2 == -777
+(228 real changes made)
+
+->  replace ques3 = 0 if ques3 == -777
+(427 real changes made)
+
+->  replace ques4 = 0 if ques4 == -777
+(271 real changes made)
+
+->  replace ques5 = 0 if ques5 == -777
+(418 real changes made)
+
+->  replace ques6 = 0 if ques6 == -777
+(1205 real changes made)
+
+->  replace ques7 = 0 if ques7 == -777
+(744 real changes made)
+
+->  replace ques8 = 0 if ques8 == -777
+(1502 real changes made)
+
+->  replace ques9 = 0 if ques9 == -777
+(831 real changes made)
+
+->  replace ques10 = 0 if ques10 == -777
+(1431 real changes made)
+
+. for var _all: replace X = 0 if X == .;
+
+->  replace idnum = 0 if idnum == .
+(0 real changes made)
+
+->  replace childno = 0 if childno == .
+(0 real changes made)
+
+->  replace evalcode = 0 if evalcode == .
+(465 real changes made)
+
+->  replace ques1 = 0 if ques1 == .
+(0 real changes made)
+
+->  replace ques2 = 0 if ques2 == .
+(0 real changes made)
+
+->  replace ques3 = 0 if ques3 == .
+(1 real change made)
+
+->  replace ques4 = 0 if ques4 == .
+(0 real changes made)
+
+->  replace ques5 = 0 if ques5 == .
+(0 real changes made)
+
+->  replace ques6 = 0 if ques6 == .
+(0 real changes made)
+
+->  replace ques7 = 0 if ques7 == .
+(0 real changes made)
+
+->  replace ques8 = 0 if ques8 == .
+(0 real changes made)
+
+->  replace ques9 = 0 if ques9 == .
+(0 real changes made)
+
+->  replace ques10 = 0 if ques10 == .
+(0 real changes made)
+
+. for var _all: replace X = 0 if X <0;
+
+->  replace idnum = 0 if idnum <0
+(0 real changes made)
+
+->  replace childno = 0 if childno <0
+(0 real changes made)
+
+->  replace evalcode = 0 if evalcode <0
+(0 real changes made)
+
+->  replace ques1 = 0 if ques1 <0
+(0 real changes made)
+
+->  replace ques2 = 0 if ques2 <0
+(0 real changes made)
+
+->  replace ques3 = 0 if ques3 <0
+(4 real changes made)
+
+->  replace ques4 = 0 if ques4 <0
+(0 real changes made)
+
+->  replace ques5 = 0 if ques5 <0
+(0 real changes made)
+
+->  replace ques6 = 0 if ques6 <0
+(8 real changes made)
+
+->  replace ques7 = 0 if ques7 <0
+(0 real changes made)
+
+->  replace ques8 = 0 if ques8 <0
+(8 real changes made)
+
+->  replace ques9 = 0 if ques9 <0
+(0 real changes made)
+
+->  replace ques10 = 0 if ques10 <0
+(0 real changes made)
+
+. egen post_math_v=rsum(ques7 ques8 ques9 ques10);
+
+. egen post_lang_v=rsum(ques1 ques2 ques3 ques4 ques5 ques6);
+
+. replace post_math_v=10*post_math_v/8;
+(2108 real changes made)
+
+. replace post_lang_v=10*post_lang_v/12;
+(2720 real changes made)
+
+. egen post_total_v=rsum(post_math_v post_lang_v);
+
+. rename idnum schid;
+
+. keep schid childno post_math_v post_lang_v post_total_v;
+
+. replace schid=2492 if schid==2493;
+(24 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp3, replace;
+file Temp\temp3.dta saved
+
+. clear;
+
+. *postTEST WRIT;
+. use Endline\post_written;
+
+. for var _all: replace X = 0 if X == -999;
+
+->  replace sch_id = 0 if sch_id == -999
+(0 real changes made)
+
+->  replace ch_no_ = 0 if ch_no_ == -999
+(0 real changes made)
+
+->  replace eval_code = 0 if eval_code == -999
+(0 real changes made)
+
+->  replace _1a = 0 if _1a == -999
+(0 real changes made)
+
+->  replace _1b = 0 if _1b == -999
+(0 real changes made)
+
+->  replace _1c = 0 if _1c == -999
+(0 real changes made)
+
+->  replace _1d = 0 if _1d == -999
+(0 real changes made)
+
+->  replace _1e = 0 if _1e == -999
+(0 real changes made)
+
+->  replace _1f = 0 if _1f == -999
+(0 real changes made)
+
+->  replace _1g = 0 if _1g == -999
+(0 real changes made)
+
+->  replace _1h = 0 if _1h == -999
+(0 real changes made)
+
+->  replace _1i = 0 if _1i == -999
+(0 real changes made)
+
+->  replace _1j = 0 if _1j == -999
+(0 real changes made)
+
+->  replace _2a = 0 if _2a == -999
+(0 real changes made)
+
+->  replace _2b = 0 if _2b == -999
+(0 real changes made)
+
+->  replace _2c = 0 if _2c == -999
+(0 real changes made)
+
+->  replace _2d = 0 if _2d == -999
+(0 real changes made)
+
+->  replace _2e = 0 if _2e == -999
+(0 real changes made)
+
+->  replace _2f = 0 if _2f == -999
+(0 real changes made)
+
+->  replace _2g = 0 if _2g == -999
+(0 real changes made)
+
+->  replace _2h = 0 if _2h == -999
+(0 real changes made)
+
+->  replace _2i = 0 if _2i == -999
+(0 real changes made)
+
+->  replace _2j = 0 if _2j == -999
+(0 real changes made)
+
+->  replace _3a = 0 if _3a == -999
+(0 real changes made)
+
+->  replace _3b = 0 if _3b == -999
+(0 real changes made)
+
+->  replace _3c = 0 if _3c == -999
+(0 real changes made)
+
+->  replace _3d = 0 if _3d == -999
+(0 real changes made)
+
+->  replace _3e = 0 if _3e == -999
+(0 real changes made)
+
+->  replace _4a = 0 if _4a == -999
+(0 real changes made)
+
+->  replace _4b = 0 if _4b == -999
+(0 real changes made)
+
+->  replace _4c = 0 if _4c == -999
+(0 real changes made)
+
+->  replace _4d = 0 if _4d == -999
+(0 real changes made)
+
+->  replace _4e = 0 if _4e == -999
+(0 real changes made)
+
+->  replace _4f = 0 if _4f == -999
+(0 real changes made)
+
+->  replace _4g = 0 if _4g == -999
+(0 real changes made)
+
+->  replace _5a = 0 if _5a == -999
+(0 real changes made)
+
+->  replace _5b = 0 if _5b == -999
+(0 real changes made)
+
+->  replace _5c = 0 if _5c == -999
+(0 real changes made)
+
+->  replace _5d = 0 if _5d == -999
+(0 real changes made)
+
+->  replace _5e = 0 if _5e == -999
+(0 real changes made)
+
+->  replace _6a = 0 if _6a == -999
+(0 real changes made)
+
+->  replace _6b = 0 if _6b == -999
+(0 real changes made)
+
+->  replace _7a = 0 if _7a == -999
+(0 real changes made)
+
+->  replace _7b = 0 if _7b == -999
+(0 real changes made)
+
+->  replace _7c = 0 if _7c == -999
+(0 real changes made)
+
+->  replace _8a = 0 if _8a == -999
+(0 real changes made)
+
+->  replace _8b = 0 if _8b == -999
+(0 real changes made)
+
+->  replace _8c = 0 if _8c == -999
+(0 real changes made)
+
+->  replace _8d = 0 if _8d == -999
+(0 real changes made)
+
+->  replace _8e = 0 if _8e == -999
+(0 real changes made)
+
+->  replace _8f = 0 if _8f == -999
+(0 real changes made)
+
+->  replace _8g = 0 if _8g == -999
+(0 real changes made)
+
+->  replace _8h = 0 if _8h == -999
+(0 real changes made)
+
+->  replace _9a = 0 if _9a == -999
+(0 real changes made)
+
+->  replace _9b = 0 if _9b == -999
+(0 real changes made)
+
+->  replace _9c = 0 if _9c == -999
+(0 real changes made)
+
+->  replace _9d = 0 if _9d == -999
+(0 real changes made)
+
+->  replace _9e = 0 if _9e == -999
+(0 real changes made)
+
+->  replace _9f = 0 if _9f == -999
+(0 real changes made)
+
+->  replace _9g = 0 if _9g == -999
+(0 real changes made)
+
+->  replace _9h = 0 if _9h == -999
+(0 real changes made)
+
+->  replace c62 = 0 if c62 == -999
+(0 real changes made)
+
+->  replace c63 = 0 if c63 == -999
+(0 real changes made)
+
+->  replace c64 = 0 if c64 == -999
+(0 real changes made)
+
+->  replace c65 = 0 if c65 == -999
+(0 real changes made)
+
+. for var _all: replace X = 0 if X == -888;
+
+->  replace sch_id = 0 if sch_id == -888
+(0 real changes made)
+
+->  replace ch_no_ = 0 if ch_no_ == -888
+(0 real changes made)
+
+->  replace eval_code = 0 if eval_code == -888
+(0 real changes made)
+
+->  replace _1a = 0 if _1a == -888
+(0 real changes made)
+
+->  replace _1b = 0 if _1b == -888
+(0 real changes made)
+
+->  replace _1c = 0 if _1c == -888
+(0 real changes made)
+
+->  replace _1d = 0 if _1d == -888
+(0 real changes made)
+
+->  replace _1e = 0 if _1e == -888
+(0 real changes made)
+
+->  replace _1f = 0 if _1f == -888
+(0 real changes made)
+
+->  replace _1g = 0 if _1g == -888
+(0 real changes made)
+
+->  replace _1h = 0 if _1h == -888
+(0 real changes made)
+
+->  replace _1i = 0 if _1i == -888
+(0 real changes made)
+
+->  replace _1j = 0 if _1j == -888
+(0 real changes made)
+
+->  replace _2a = 0 if _2a == -888
+(0 real changes made)
+
+->  replace _2b = 0 if _2b == -888
+(0 real changes made)
+
+->  replace _2c = 0 if _2c == -888
+(0 real changes made)
+
+->  replace _2d = 0 if _2d == -888
+(0 real changes made)
+
+->  replace _2e = 0 if _2e == -888
+(0 real changes made)
+
+->  replace _2f = 0 if _2f == -888
+(0 real changes made)
+
+->  replace _2g = 0 if _2g == -888
+(0 real changes made)
+
+->  replace _2h = 0 if _2h == -888
+(0 real changes made)
+
+->  replace _2i = 0 if _2i == -888
+(0 real changes made)
+
+->  replace _2j = 0 if _2j == -888
+(0 real changes made)
+
+->  replace _3a = 0 if _3a == -888
+(0 real changes made)
+
+->  replace _3b = 0 if _3b == -888
+(0 real changes made)
+
+->  replace _3c = 0 if _3c == -888
+(0 real changes made)
+
+->  replace _3d = 0 if _3d == -888
+(0 real changes made)
+
+->  replace _3e = 0 if _3e == -888
+(0 real changes made)
+
+->  replace _4a = 0 if _4a == -888
+(0 real changes made)
+
+->  replace _4b = 0 if _4b == -888
+(0 real changes made)
+
+->  replace _4c = 0 if _4c == -888
+(0 real changes made)
+
+->  replace _4d = 0 if _4d == -888
+(0 real changes made)
+
+->  replace _4e = 0 if _4e == -888
+(0 real changes made)
+
+->  replace _4f = 0 if _4f == -888
+(0 real changes made)
+
+->  replace _4g = 0 if _4g == -888
+(0 real changes made)
+
+->  replace _5a = 0 if _5a == -888
+(0 real changes made)
+
+->  replace _5b = 0 if _5b == -888
+(0 real changes made)
+
+->  replace _5c = 0 if _5c == -888
+(0 real changes made)
+
+->  replace _5d = 0 if _5d == -888
+(0 real changes made)
+
+->  replace _5e = 0 if _5e == -888
+(0 real changes made)
+
+->  replace _6a = 0 if _6a == -888
+(0 real changes made)
+
+->  replace _6b = 0 if _6b == -888
+(0 real changes made)
+
+->  replace _7a = 0 if _7a == -888
+(0 real changes made)
+
+->  replace _7b = 0 if _7b == -888
+(0 real changes made)
+
+->  replace _7c = 0 if _7c == -888
+(0 real changes made)
+
+->  replace _8a = 0 if _8a == -888
+(0 real changes made)
+
+->  replace _8b = 0 if _8b == -888
+(0 real changes made)
+
+->  replace _8c = 0 if _8c == -888
+(0 real changes made)
+
+->  replace _8d = 0 if _8d == -888
+(0 real changes made)
+
+->  replace _8e = 0 if _8e == -888
+(0 real changes made)
+
+->  replace _8f = 0 if _8f == -888
+(0 real changes made)
+
+->  replace _8g = 0 if _8g == -888
+(0 real changes made)
+
+->  replace _8h = 0 if _8h == -888
+(0 real changes made)
+
+->  replace _9a = 0 if _9a == -888
+(0 real changes made)
+
+->  replace _9b = 0 if _9b == -888
+(0 real changes made)
+
+->  replace _9c = 0 if _9c == -888
+(0 real changes made)
+
+->  replace _9d = 0 if _9d == -888
+(0 real changes made)
+
+->  replace _9e = 0 if _9e == -888
+(0 real changes made)
+
+->  replace _9f = 0 if _9f == -888
+(0 real changes made)
+
+->  replace _9g = 0 if _9g == -888
+(0 real changes made)
+
+->  replace _9h = 0 if _9h == -888
+(0 real changes made)
+
+->  replace c62 = 0 if c62 == -888
+(0 real changes made)
+
+->  replace c63 = 0 if c63 == -888
+(0 real changes made)
+
+->  replace c64 = 0 if c64 == -888
+(0 real changes made)
+
+->  replace c65 = 0 if c65 == -888
+(0 real changes made)
+
+. for var _all: replace X = 0 if X == -777;
+
+->  replace sch_id = 0 if sch_id == -777
+(0 real changes made)
+
+->  replace ch_no_ = 0 if ch_no_ == -777
+(0 real changes made)
+
+->  replace eval_code = 0 if eval_code == -777
+(582 real changes made)
+
+->  replace _1a = 0 if _1a == -777
+(130 real changes made)
+
+->  replace _1b = 0 if _1b == -777
+(94 real changes made)
+
+->  replace _1c = 0 if _1c == -777
+(177 real changes made)
+
+->  replace _1d = 0 if _1d == -777
+(107 real changes made)
+
+->  replace _1e = 0 if _1e == -777
+(111 real changes made)
+
+->  replace _1f = 0 if _1f == -777
+(168 real changes made)
+
+->  replace _1g = 0 if _1g == -777
+(140 real changes made)
+
+->  replace _1h = 0 if _1h == -777
+(137 real changes made)
+
+->  replace _1i = 0 if _1i == -777
+(88 real changes made)
+
+->  replace _1j = 0 if _1j == -777
+(189 real changes made)
+
+->  replace _2a = 0 if _2a == -777
+(184 real changes made)
+
+->  replace _2b = 0 if _2b == -777
+(160 real changes made)
+
+->  replace _2c = 0 if _2c == -777
+(200 real changes made)
+
+->  replace _2d = 0 if _2d == -777
+(227 real changes made)
+
+->  replace _2e = 0 if _2e == -777
+(321 real changes made)
+
+->  replace _2f = 0 if _2f == -777
+(242 real changes made)
+
+->  replace _2g = 0 if _2g == -777
+(279 real changes made)
+
+->  replace _2h = 0 if _2h == -777
+(245 real changes made)
+
+->  replace _2i = 0 if _2i == -777
+(275 real changes made)
+
+->  replace _2j = 0 if _2j == -777
+(365 real changes made)
+
+->  replace _3a = 0 if _3a == -777
+(320 real changes made)
+
+->  replace _3b = 0 if _3b == -777
+(396 real changes made)
+
+->  replace _3c = 0 if _3c == -777
+(413 real changes made)
+
+->  replace _3d = 0 if _3d == -777
+(440 real changes made)
+
+->  replace _3e = 0 if _3e == -777
+(473 real changes made)
+
+->  replace _4a = 0 if _4a == -777
+(472 real changes made)
+
+->  replace _4b = 0 if _4b == -777
+(687 real changes made)
+
+->  replace _4c = 0 if _4c == -777
+(646 real changes made)
+
+->  replace _4d = 0 if _4d == -777
+(814 real changes made)
+
+->  replace _4e = 0 if _4e == -777
+(885 real changes made)
+
+->  replace _4f = 0 if _4f == -777
+(919 real changes made)
+
+->  replace _4g = 0 if _4g == -777
+(959 real changes made)
+
+->  replace _5a = 0 if _5a == -777
+(778 real changes made)
+
+->  replace _5b = 0 if _5b == -777
+(909 real changes made)
+
+->  replace _5c = 0 if _5c == -777
+(993 real changes made)
+
+->  replace _5d = 0 if _5d == -777
+(1064 real changes made)
+
+->  replace _5e = 0 if _5e == -777
+(1062 real changes made)
+
+->  replace _6a = 0 if _6a == -777
+(61 real changes made)
+
+->  replace _6b = 0 if _6b == -777
+(77 real changes made)
+
+->  replace _7a = 0 if _7a == -777
+(379 real changes made)
+
+->  replace _7b = 0 if _7b == -777
+(478 real changes made)
+
+->  replace _7c = 0 if _7c == -777
+(541 real changes made)
+
+->  replace _8a = 0 if _8a == -777
+(298 real changes made)
+
+->  replace _8b = 0 if _8b == -777
+(364 real changes made)
+
+->  replace _8c = 0 if _8c == -777
+(380 real changes made)
+
+->  replace _8d = 0 if _8d == -777
+(459 real changes made)
+
+->  replace _8e = 0 if _8e == -777
+(515 real changes made)
+
+->  replace _8f = 0 if _8f == -777
+(607 real changes made)
+
+->  replace _8g = 0 if _8g == -777
+(817 real changes made)
+
+->  replace _8h = 0 if _8h == -777
+(875 real changes made)
+
+->  replace _9a = 0 if _9a == -777
+(589 real changes made)
+
+->  replace _9b = 0 if _9b == -777
+(651 real changes made)
+
+->  replace _9c = 0 if _9c == -777
+(627 real changes made)
+
+->  replace _9d = 0 if _9d == -777
+(703 real changes made)
+
+->  replace _9e = 0 if _9e == -777
+(703 real changes made)
+
+->  replace _9f = 0 if _9f == -777
+(744 real changes made)
+
+->  replace _9g = 0 if _9g == -777
+(759 real changes made)
+
+->  replace _9h = 0 if _9h == -777
+(811 real changes made)
+
+->  replace c62 = 0 if c62 == -777
+(752 real changes made)
+
+->  replace c63 = 0 if c63 == -777
+(787 real changes made)
+
+->  replace c64 = 0 if c64 == -777
+(839 real changes made)
+
+->  replace c65 = 0 if c65 == -777
+(871 real changes made)
+
+. for var _all: replace X = 0 if X ==  777;
+
+->  replace sch_id = 0 if sch_id == 777
+(0 real changes made)
+
+->  replace ch_no_ = 0 if ch_no_ == 777
+(0 real changes made)
+
+->  replace eval_code = 0 if eval_code == 777
+(0 real changes made)
+
+->  replace _1a = 0 if _1a == 777
+(0 real changes made)
+
+->  replace _1b = 0 if _1b == 777
+(0 real changes made)
+
+->  replace _1c = 0 if _1c == 777
+(0 real changes made)
+
+->  replace _1d = 0 if _1d == 777
+(0 real changes made)
+
+->  replace _1e = 0 if _1e == 777
+(0 real changes made)
+
+->  replace _1f = 0 if _1f == 777
+(0 real changes made)
+
+->  replace _1g = 0 if _1g == 777
+(0 real changes made)
+
+->  replace _1h = 0 if _1h == 777
+(0 real changes made)
+
+->  replace _1i = 0 if _1i == 777
+(0 real changes made)
+
+->  replace _1j = 0 if _1j == 777
+(0 real changes made)
+
+->  replace _2a = 0 if _2a == 777
+(0 real changes made)
+
+->  replace _2b = 0 if _2b == 777
+(0 real changes made)
+
+->  replace _2c = 0 if _2c == 777
+(0 real changes made)
+
+->  replace _2d = 0 if _2d == 777
+(0 real changes made)
+
+->  replace _2e = 0 if _2e == 777
+(0 real changes made)
+
+->  replace _2f = 0 if _2f == 777
+(0 real changes made)
+
+->  replace _2g = 0 if _2g == 777
+(0 real changes made)
+
+->  replace _2h = 0 if _2h == 777
+(0 real changes made)
+
+->  replace _2i = 0 if _2i == 777
+(0 real changes made)
+
+->  replace _2j = 0 if _2j == 777
+(0 real changes made)
+
+->  replace _3a = 0 if _3a == 777
+(0 real changes made)
+
+->  replace _3b = 0 if _3b == 777
+(0 real changes made)
+
+->  replace _3c = 0 if _3c == 777
+(0 real changes made)
+
+->  replace _3d = 0 if _3d == 777
+(0 real changes made)
+
+->  replace _3e = 0 if _3e == 777
+(0 real changes made)
+
+->  replace _4a = 0 if _4a == 777
+(0 real changes made)
+
+->  replace _4b = 0 if _4b == 777
+(0 real changes made)
+
+->  replace _4c = 0 if _4c == 777
+(0 real changes made)
+
+->  replace _4d = 0 if _4d == 777
+(0 real changes made)
+
+->  replace _4e = 0 if _4e == 777
+(0 real changes made)
+
+->  replace _4f = 0 if _4f == 777
+(0 real changes made)
+
+->  replace _4g = 0 if _4g == 777
+(0 real changes made)
+
+->  replace _5a = 0 if _5a == 777
+(0 real changes made)
+
+->  replace _5b = 0 if _5b == 777
+(0 real changes made)
+
+->  replace _5c = 0 if _5c == 777
+(0 real changes made)
+
+->  replace _5d = 0 if _5d == 777
+(0 real changes made)
+
+->  replace _5e = 0 if _5e == 777
+(0 real changes made)
+
+->  replace _6a = 0 if _6a == 777
+(1 real change made)
+
+->  replace _6b = 0 if _6b == 777
+(0 real changes made)
+
+->  replace _7a = 0 if _7a == 777
+(0 real changes made)
+
+->  replace _7b = 0 if _7b == 777
+(0 real changes made)
+
+->  replace _7c = 0 if _7c == 777
+(0 real changes made)
+
+->  replace _8a = 0 if _8a == 777
+(0 real changes made)
+
+->  replace _8b = 0 if _8b == 777
+(0 real changes made)
+
+->  replace _8c = 0 if _8c == 777
+(0 real changes made)
+
+->  replace _8d = 0 if _8d == 777
+(0 real changes made)
+
+->  replace _8e = 0 if _8e == 777
+(0 real changes made)
+
+->  replace _8f = 0 if _8f == 777
+(0 real changes made)
+
+->  replace _8g = 0 if _8g == 777
+(0 real changes made)
+
+->  replace _8h = 0 if _8h == 777
+(0 real changes made)
+
+->  replace _9a = 0 if _9a == 777
+(0 real changes made)
+
+->  replace _9b = 0 if _9b == 777
+(0 real changes made)
+
+->  replace _9c = 0 if _9c == 777
+(0 real changes made)
+
+->  replace _9d = 0 if _9d == 777
+(0 real changes made)
+
+->  replace _9e = 0 if _9e == 777
+(0 real changes made)
+
+->  replace _9f = 0 if _9f == 777
+(0 real changes made)
+
+->  replace _9g = 0 if _9g == 777
+(0 real changes made)
+
+->  replace _9h = 0 if _9h == 777
+(0 real changes made)
+
+->  replace c62 = 0 if c62 == 777
+(0 real changes made)
+
+->  replace c63 = 0 if c63 == 777
+(0 real changes made)
+
+->  replace c64 = 0 if c64 == 777
+(0 real changes made)
+
+->  replace c65 = 0 if c65 == 777
+(0 real changes made)
+
+. for var _all: replace X = 0 if X == .;
+
+->  replace sch_id = 0 if sch_id == .
+(0 real changes made)
+
+->  replace ch_no_ = 0 if ch_no_ == .
+(0 real changes made)
+
+->  replace eval_code = 0 if eval_code == .
+(142 real changes made)
+
+->  replace _1a = 0 if _1a == .
+(0 real changes made)
+
+->  replace _1b = 0 if _1b == .
+(0 real changes made)
+
+->  replace _1c = 0 if _1c == .
+(0 real changes made)
+
+->  replace _1d = 0 if _1d == .
+(0 real changes made)
+
+->  replace _1e = 0 if _1e == .
+(0 real changes made)
+
+->  replace _1f = 0 if _1f == .
+(0 real changes made)
+
+->  replace _1g = 0 if _1g == .
+(0 real changes made)
+
+->  replace _1h = 0 if _1h == .
+(0 real changes made)
+
+->  replace _1i = 0 if _1i == .
+(0 real changes made)
+
+->  replace _1j = 0 if _1j == .
+(0 real changes made)
+
+->  replace _2a = 0 if _2a == .
+(1 real change made)
+
+->  replace _2b = 0 if _2b == .
+(1 real change made)
+
+->  replace _2c = 0 if _2c == .
+(0 real changes made)
+
+->  replace _2d = 0 if _2d == .
+(0 real changes made)
+
+->  replace _2e = 0 if _2e == .
+(0 real changes made)
+
+->  replace _2f = 0 if _2f == .
+(0 real changes made)
+
+->  replace _2g = 0 if _2g == .
+(0 real changes made)
+
+->  replace _2h = 0 if _2h == .
+(0 real changes made)
+
+->  replace _2i = 0 if _2i == .
+(0 real changes made)
+
+->  replace _2j = 0 if _2j == .
+(0 real changes made)
+
+->  replace _3a = 0 if _3a == .
+(0 real changes made)
+
+->  replace _3b = 0 if _3b == .
+(0 real changes made)
+
+->  replace _3c = 0 if _3c == .
+(0 real changes made)
+
+->  replace _3d = 0 if _3d == .
+(0 real changes made)
+
+->  replace _3e = 0 if _3e == .
+(0 real changes made)
+
+->  replace _4a = 0 if _4a == .
+(0 real changes made)
+
+->  replace _4b = 0 if _4b == .
+(0 real changes made)
+
+->  replace _4c = 0 if _4c == .
+(0 real changes made)
+
+->  replace _4d = 0 if _4d == .
+(0 real changes made)
+
+->  replace _4e = 0 if _4e == .
+(0 real changes made)
+
+->  replace _4f = 0 if _4f == .
+(0 real changes made)
+
+->  replace _4g = 0 if _4g == .
+(1 real change made)
+
+->  replace _5a = 0 if _5a == .
+(0 real changes made)
+
+->  replace _5b = 0 if _5b == .
+(0 real changes made)
+
+->  replace _5c = 0 if _5c == .
+(0 real changes made)
+
+->  replace _5d = 0 if _5d == .
+(0 real changes made)
+
+->  replace _5e = 0 if _5e == .
+(2 real changes made)
+
+->  replace _6a = 0 if _6a == .
+(0 real changes made)
+
+->  replace _6b = 0 if _6b == .
+(0 real changes made)
+
+->  replace _7a = 0 if _7a == .
+(0 real changes made)
+
+->  replace _7b = 0 if _7b == .
+(1 real change made)
+
+->  replace _7c = 0 if _7c == .
+(1 real change made)
+
+->  replace _8a = 0 if _8a == .
+(2 real changes made)
+
+->  replace _8b = 0 if _8b == .
+(1 real change made)
+
+->  replace _8c = 0 if _8c == .
+(1 real change made)
+
+->  replace _8d = 0 if _8d == .
+(1 real change made)
+
+->  replace _8e = 0 if _8e == .
+(1 real change made)
+
+->  replace _8f = 0 if _8f == .
+(1 real change made)
+
+->  replace _8g = 0 if _8g == .
+(1 real change made)
+
+->  replace _8h = 0 if _8h == .
+(1 real change made)
+
+->  replace _9a = 0 if _9a == .
+(2 real changes made)
+
+->  replace _9b = 0 if _9b == .
+(1 real change made)
+
+->  replace _9c = 0 if _9c == .
+(1 real change made)
+
+->  replace _9d = 0 if _9d == .
+(1 real change made)
+
+->  replace _9e = 0 if _9e == .
+(1 real change made)
+
+->  replace _9f = 0 if _9f == .
+(1 real change made)
+
+->  replace _9g = 0 if _9g == .
+(1 real change made)
+
+->  replace _9h = 0 if _9h == .
+(1 real change made)
+
+->  replace c62 = 0 if c62 == .
+(1 real change made)
+
+->  replace c63 = 0 if c63 == .
+(1 real change made)
+
+->  replace c64 = 0 if c64 == .
+(1 real change made)
+
+->  replace c65 = 0 if c65 == .
+(1 real change made)
+
+. for var _all: replace X = 0 if X <0;
+
+->  replace sch_id = 0 if sch_id <0
+(0 real changes made)
+
+->  replace ch_no_ = 0 if ch_no_ <0
+(0 real changes made)
+
+->  replace eval_code = 0 if eval_code <0
+(0 real changes made)
+
+->  replace _1a = 0 if _1a <0
+(0 real changes made)
+
+->  replace _1b = 0 if _1b <0
+(0 real changes made)
+
+->  replace _1c = 0 if _1c <0
+(0 real changes made)
+
+->  replace _1d = 0 if _1d <0
+(0 real changes made)
+
+->  replace _1e = 0 if _1e <0
+(0 real changes made)
+
+->  replace _1f = 0 if _1f <0
+(0 real changes made)
+
+->  replace _1g = 0 if _1g <0
+(0 real changes made)
+
+->  replace _1h = 0 if _1h <0
+(0 real changes made)
+
+->  replace _1i = 0 if _1i <0
+(0 real changes made)
+
+->  replace _1j = 0 if _1j <0
+(0 real changes made)
+
+->  replace _2a = 0 if _2a <0
+(0 real changes made)
+
+->  replace _2b = 0 if _2b <0
+(0 real changes made)
+
+->  replace _2c = 0 if _2c <0
+(0 real changes made)
+
+->  replace _2d = 0 if _2d <0
+(1 real change made)
+
+->  replace _2e = 0 if _2e <0
+(1 real change made)
+
+->  replace _2f = 0 if _2f <0
+(0 real changes made)
+
+->  replace _2g = 0 if _2g <0
+(1 real change made)
+
+->  replace _2h = 0 if _2h <0
+(0 real changes made)
+
+->  replace _2i = 0 if _2i <0
+(0 real changes made)
+
+->  replace _2j = 0 if _2j <0
+(1 real change made)
+
+->  replace _3a = 0 if _3a <0
+(0 real changes made)
+
+->  replace _3b = 0 if _3b <0
+(0 real changes made)
+
+->  replace _3c = 0 if _3c <0
+(0 real changes made)
+
+->  replace _3d = 0 if _3d <0
+(0 real changes made)
+
+->  replace _3e = 0 if _3e <0
+(1 real change made)
+
+->  replace _4a = 0 if _4a <0
+(0 real changes made)
+
+->  replace _4b = 0 if _4b <0
+(1 real change made)
+
+->  replace _4c = 0 if _4c <0
+(0 real changes made)
+
+->  replace _4d = 0 if _4d <0
+(0 real changes made)
+
+->  replace _4e = 0 if _4e <0
+(0 real changes made)
+
+->  replace _4f = 0 if _4f <0
+(0 real changes made)
+
+->  replace _4g = 0 if _4g <0
+(1 real change made)
+
+->  replace _5a = 0 if _5a <0
+(0 real changes made)
+
+->  replace _5b = 0 if _5b <0
+(2 real changes made)
+
+->  replace _5c = 0 if _5c <0
+(0 real changes made)
+
+->  replace _5d = 0 if _5d <0
+(2 real changes made)
+
+->  replace _5e = 0 if _5e <0
+(3 real changes made)
+
+->  replace _6a = 0 if _6a <0
+(0 real changes made)
+
+->  replace _6b = 0 if _6b <0
+(0 real changes made)
+
+->  replace _7a = 0 if _7a <0
+(0 real changes made)
+
+->  replace _7b = 0 if _7b <0
+(0 real changes made)
+
+->  replace _7c = 0 if _7c <0
+(0 real changes made)
+
+->  replace _8a = 0 if _8a <0
+(0 real changes made)
+
+->  replace _8b = 0 if _8b <0
+(0 real changes made)
+
+->  replace _8c = 0 if _8c <0
+(1 real change made)
+
+->  replace _8d = 0 if _8d <0
+(1 real change made)
+
+->  replace _8e = 0 if _8e <0
+(1 real change made)
+
+->  replace _8f = 0 if _8f <0
+(0 real changes made)
+
+->  replace _8g = 0 if _8g <0
+(2 real changes made)
+
+->  replace _8h = 0 if _8h <0
+(0 real changes made)
+
+->  replace _9a = 0 if _9a <0
+(0 real changes made)
+
+->  replace _9b = 0 if _9b <0
+(0 real changes made)
+
+->  replace _9c = 0 if _9c <0
+(0 real changes made)
+
+->  replace _9d = 0 if _9d <0
+(0 real changes made)
+
+->  replace _9e = 0 if _9e <0
+(0 real changes made)
+
+->  replace _9f = 0 if _9f <0
+(1 real change made)
+
+->  replace _9g = 0 if _9g <0
+(0 real changes made)
+
+->  replace _9h = 0 if _9h <0
+(0 real changes made)
+
+->  replace c62 = 0 if c62 <0
+(0 real changes made)
+
+->  replace c63 = 0 if c63 <0
+(1 real change made)
+
+->  replace c64 = 0 if c64 <0
+(0 real changes made)
+
+->  replace c65 = 0 if c65 <0
+(0 real changes made)
+
+. egen post_math_w=rsum(_6a _6b _7a _7b _7c _8a _8b _8c _8d _8e _8f _8g _8h _9a _9b  _9c _9d _9e _9f  _9g  _9h c62 c
+> 63 c64 c65);
+
+. egen post_lang_w=rsum( _1a _1b _1c _1d _1e _1f _1g _1h _1i _1j _2a _2b _2c _2d _2e _2f _2g _2h _2i _2j _3a _3b _3c
+>  _3d _3e _4a _4b _4c _4d _4e _4f _4g _5a _5b _5c _5d _5e);
+
+. replace post_math_w=10*post_math_w/45;
+(1386 real changes made)
+
+. replace post_lang_w=10*post_lang_w/55;
+(1396 real changes made)
+
+. egen post_total_w=rsum(post_math_w  post_lang_w);
+
+. rename sch_id schid;
+
+. rename ch_no_ childno;
+
+. gen post_writ=1;
+
+. keep schid childno post_math_w post_lang_w post_total_w post_writ;
+
+. replace schid=2492 if schid==2493;
+(19 real changes made)
+
+. sort schid childno;
+
+. save Temp\temp4, replace;
+file Temp\temp4.dta saved
+
+. clear;
+
+. *MERGE POST TEST;
+. use Temp\temp3;
+
+. sort schid childno;
+
+. merge schid childno using Temp\temp4;
+variables schid childno do not uniquely identify observations in the master data
+variables schid childno do not uniquely identify observations in Temp\temp4.dta
+
+. drop _merge;
+
+. ******************************************************************************************************************
+> ;
+. **MERGING PRE AND post TEST;
+. ******************************************************************************************************************
+> ;
+. sort schid childno;
+
+. merge schid childno using Temp\testdata;
+variables schid childno do not uniquely identify observations in the master data
+variables schid childno do not uniquely identify observations in Temp\testdata.dta
+
+. save Temp\testdata, replace;
+file Temp\testdata.dta saved
+
+. **FIXING MISTAKES IN THE DATA;
+. replace pre_math_w=56 if schid==4231 & childno==3;
+(1 real change made)
+
+. replace pre_total_v=11 if schid==3511 & childno==17;
+(1 real change made)
+
+. replace pre_total_w=34 if schid==4252 & childno==22;
+(1 real change made)
+
+. gen block = int(schid/1000);
+
+. *MERGING IN TREATMENT STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using treatschool;
+variable schid does not uniquely identify observations in the master data
+
+. gen treat = 0;
+
+. replace treat = 1 if _merge == 3;
+(1749 real changes made)
+
+. **RECODING VARIABLES;
+. for var _all: replace X = . if X == -999;
+
+->  replace schid = . if schid == -999
+(0 real changes made)
+
+->  replace childno = . if childno == -999
+(0 real changes made)
+
+->  replace post_math_v = . if post_math_v == -999
+(0 real changes made)
+
+->  replace post_lang_v = . if post_lang_v == -999
+(0 real changes made)
+
+->  replace post_total_v = . if post_total_v == -999
+(0 real changes made)
+
+->  replace post_math_w = . if post_math_w == -999
+(0 real changes made)
+
+->  replace post_lang_w = . if post_lang_w == -999
+(0 real changes made)
+
+->  replace post_total_w = . if post_total_w == -999
+(0 real changes made)
+
+->  replace post_writ = . if post_writ == -999
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -999
+(97 real changes made, 97 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -999
+(100 real changes made, 100 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -999
+(201 real changes made, 201 to missing)
+
+->  replace pre_writ = . if pre_writ == -999
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -999
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -999
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -999
+(1 real change made, 1 to missing)
+
+->  replace block = . if block == -999
+(0 real changes made)
+
+->  replace _merge = . if _merge == -999
+(0 real changes made)
+
+->  replace treat = . if treat == -999
+(0 real changes made)
+
+. for var _all: replace X = . if X == -888;
+
+->  replace schid = . if schid == -888
+(0 real changes made)
+
+->  replace childno = . if childno == -888
+(0 real changes made)
+
+->  replace post_math_v = . if post_math_v == -888
+(0 real changes made)
+
+->  replace post_lang_v = . if post_lang_v == -888
+(0 real changes made)
+
+->  replace post_total_v = . if post_total_v == -888
+(0 real changes made)
+
+->  replace post_math_w = . if post_math_w == -888
+(0 real changes made)
+
+->  replace post_lang_w = . if post_lang_w == -888
+(0 real changes made)
+
+->  replace post_total_w = . if post_total_w == -888
+(0 real changes made)
+
+->  replace post_writ = . if post_writ == -888
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -888
+(2 real changes made, 2 to missing)
+
+->  replace pre_writ = . if pre_writ == -888
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -888
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -888
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -888
+(0 real changes made)
+
+->  replace block = . if block == -888
+(0 real changes made)
+
+->  replace _merge = . if _merge == -888
+(0 real changes made)
+
+->  replace treat = . if treat == -888
+(0 real changes made)
+
+. for var _all: replace X = . if X == -777;
+
+->  replace schid = . if schid == -777
+(0 real changes made)
+
+->  replace childno = . if childno == -777
+(0 real changes made)
+
+->  replace post_math_v = . if post_math_v == -777
+(0 real changes made)
+
+->  replace post_lang_v = . if post_lang_v == -777
+(0 real changes made)
+
+->  replace post_total_v = . if post_total_v == -777
+(0 real changes made)
+
+->  replace post_math_w = . if post_math_w == -777
+(0 real changes made)
+
+->  replace post_lang_w = . if post_lang_w == -777
+(0 real changes made)
+
+->  replace post_total_w = . if post_total_w == -777
+(0 real changes made)
+
+->  replace post_writ = . if post_writ == -777
+(0 real changes made)
+
+->  replace pre_total_v = . if pre_total_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_math_v = . if pre_math_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_lang_v = . if pre_lang_v == -777
+(6 real changes made, 6 to missing)
+
+->  replace pre_writ = . if pre_writ == -777
+(0 real changes made)
+
+->  replace pre_total_w = . if pre_total_w == -777
+(0 real changes made)
+
+->  replace pre_math_w = . if pre_math_w == -777
+(0 real changes made)
+
+->  replace pre_lang_w = . if pre_lang_w == -777
+(0 real changes made)
+
+->  replace block = . if block == -777
+(0 real changes made)
+
+->  replace _merge = . if _merge == -777
+(0 real changes made)
+
+->  replace treat = . if treat == -777
+(0 real changes made)
+
+. **MERGING IN CLOSURE STATUS;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using Temp\tempclose;
+variable schid does not uniquely identify observations in the master data
+
+. drop if treat==.;
+(5 observations deleted)
+
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **SOME SAMPLE STATS;
+. ******************************************************************************************************************
+> ;
+. **CALC SCORES BY SCHID AND LOOKING AT CLOSURES;
+. sort schid close treat;
+
+. collapse (mean) pre_math_v pre_lang_v pre_total_v pre_math_w pre_lang_w pre_total_w 
+> post_math_v post_lang_v post_total_v post_math_w post_lang_w post_total_w, by(schid close treat);
+
+. clear;
+
+. **STUDENT LEVEL DATA;
+. use Temp\test_new.dta;
+
+. **DROPING SCHOOLS WITH NO PRE OR POST DATA THAT WERE BASICALLY NEVER OPEN;
+. drop if schid==1211;
+(1 observation deleted)
+
+. drop if schid==5332;
+(1 observation deleted)
+
+. drop if schid==5711;
+(1 observation deleted)
+
+. drop if schid==1111;
+(0 observations deleted)
+
+. drop if schid==2111;
+(0 observations deleted)
+
+. drop if schid==5221;
+(0 observations deleted)
+
+. drop if schid==5611;
+(0 observations deleted)
+
+. drop if schid==1113;
+(0 observations deleted)
+
+. drop if schid==5731 & childno==24;
+(2 observations deleted)
+
+. **drop if close==1;
+. save Temp\test_new.dta, replace;
+file Temp\test_new.dta saved
+
+. *LOOKING AT ENTRY AND EXIT;
+. gen entry=0;
+
+. replace entry=1 if (pre_total_v==. & pre_total_w==.) & post_total_v!=. ;
+(1122 real changes made)
+
+. gen missing=0;
+
+. replace missing=1 if (pre_total_v!=. | pre_total_w!=.) & post_total_v==. ;
+(508 real changes made)
+
+. gen stayer=0;
+
+. replace stayer=1 if missing==0 & entry==0;
+(1769 real changes made)
+
+. save Temp\test_new, replace;
+file Temp\test_new.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **ADDING SCORES;
+. ******************************************************************************************************************
+> ;
+. drop if stayer==0;
+(1630 observations deleted)
+
+. replace pre_math_w=pre_math_w/5;
+(306 real changes made)
+
+. replace pre_lang_w=pre_lang_w/5;
+(300 real changes made)
+
+. replace pre_total_w=pre_total_w/5;
+(306 real changes made)
+
+. replace pre_math_v=0 if pre_math_v==.;
+(341 real changes made)
+
+. replace pre_lang_v=0 if pre_lang_v==.;
+(427 real changes made)
+
+. replace pre_total_v=0 if pre_total_v==.;
+(338 real changes made)
+
+. replace pre_math_w=0 if pre_math_w==.;
+(1463 real changes made)
+
+. replace pre_lang_w=0 if pre_lang_w==.;
+(1463 real changes made)
+
+. replace pre_total_w=0 if pre_total_w==.;
+(1463 real changes made)
+
+. replace post_math_v=0 if post_math_v==.;
+(32 real changes made)
+
+. replace post_lang_v=0 if post_lang_v==.;
+(32 real changes made)
+
+. replace post_total_v=0 if post_total_v==.;
+(32 real changes made)
+
+. replace post_math_w=0 if post_math_w==.;
+(727 real changes made)
+
+. replace post_lang_w=0 if post_lang_w==.;
+(727 real changes made)
+
+. replace post_total_w=0 if post_total_w==.;
+(727 real changes made)
+
+. gen add_post_math=post_math_v+post_math_w;
+
+. gen add_post_lang=post_lang_v+post_lang_w;
+
+. gen add_post_total=post_total_v+post_total_w;
+
+. ******************************************************************************************************************
+> ;
+. **Merge in post-Test Data;
+. ******************************************************************************************************************
+> ;
+. gen post_dummy=1;
+
+. drop _merge;
+
+. sort schid childno;
+
+. merge schid childno using Endline\normalization;
+variables schid childno do not uniquely identify observations in the master data
+
+. save Temp\data_norm, replace;
+file Temp\data_norm.dta saved
+
+. ******************************************************************************************************************
+> ;
+. **NORMALIZING SCORES BY EVERYONE!;
+. ******************************************************************************************************************
+> ;
+. capture program drop zscore;
+
+. keep if post_dummy==1;
+(345 observations deleted)
+
+.  program define zscore;
+  1.         syntax, option1(string) option2(string);
+  2. sort treat;
+  3. egen m1_`option1'=mean(`option2') if treat==0 & `option2'!=.;
+  4. egen sd1_`option1'=sd(`option2') if treat==0 & `option2'!=.;
+  5. egen m_`option1'=mean(m1_`option1');
+  6. egen sd_`option1'=mean(sd1_`option1');
+  7. gen z_`option1'=(`option1'-m_`option1')/sd_`option1';
+  8. end;
+
+. zscore, option1(add_post_math) option2(math_old);
+(1036 missing values generated)
+(1036 missing values generated)
+
+. zscore, option1(add_post_lang) option2(lang_old);
+(1036 missing values generated)
+(1036 missing values generated)
+
+. zscore, option1(add_post_total) option2(total_old);
+(1036 missing values generated)
+(1036 missing values generated)
+
+. replace post_writ=0 if post_writ==.;
+(727 real changes made)
+
+. sort treat;
+
+. by treat: sum post_writ;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+   post_writ |       885    .5683616    .4955847          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+   post_writ |       884    .6097285    .4880872          0          1
+
+
+. ***********************************************************************************************************;
+. **ADDING PAYMENT DATA AND AVERAGE CHECK DATA!;
+. drop _merge;
+
+. sort schid;
+
+. merge schid using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests\Baseline\av_random_post";
+variable schid does not uniquely identify observations in the master data
+
+. drop _merge;
+
+. sort schid;
+
+. merge schid using "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\Tests\Baseline\av_payments_post";
+variable schid does not uniquely identify observations in the master data
+
+. drop if stayer==.;
+(10 observations deleted)
+
+. replace payment=1000 if treat==0;
+(885 real changes made)
+
+. **COL 1;
+. regress post_writ open pre_total_v pre_total_w pre_writ if treat==0, cluster(schid);
+
+Linear regression                                      Number of obs =     883
+                                                       F(  4,    54) =   56.78
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.2040
+                                                       Root MSE      =  .44328
+
+                                 (Std. Err. adjusted for 55 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+   post_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .3089333   .1539657     2.01   0.050     .0002507    .6176159
+ pre_total_v |   .0203322   .0068624     2.96   0.005      .006574    .0340905
+ pre_total_w |   .0076773    .005785     1.33   0.190    -.0039208    .0192755
+    pre_writ |   .5922731   .0979157     6.05   0.000     .3959639    .7885824
+       _cons |   .0426467   .1222189     0.35   0.728    -.2023875    .2876809
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket replace;
+
+. regress z_add_post_total open pre_total_v pre_total_w pre_writ if treat==0, cluster(schid);
+
+Linear regression                                      Number of obs =     883
+                                                       F(  4,    54) =   61.06
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.3980
+                                                       Root MSE      =  .78205
+
+                                 (Std. Err. adjusted for 55 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_post~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .5823219    .350242     1.66   0.102    -.1198709    1.284515
+ pre_total_v |   .0471867   .0154603     3.05   0.004     .0161906    .0781828
+ pre_total_w |   .0881541   .0118272     7.45   0.000      .064442    .1118663
+    pre_writ |   .8571267   .2290235     3.74   0.000     .3979622    1.316291
+       _cons |  -.9480672   .2824652    -3.36   0.001    -1.514376   -.3817587
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. **COL 2;
+. regress post_writ open pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =     877
+                                                       F(  4,    53) =  100.53
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.3063
+                                                       Root MSE      =  .40803
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+   post_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .5125729   .1548873     3.31   0.002     .2019082    .8232375
+ pre_total_v |    .038204   .0027204    14.04   0.000     .0327475    .0436604
+ pre_total_w |  -.0051062   .0039646    -1.29   0.203    -.0130582    .0028459
+    pre_writ |   .8830107   .0582337    15.16   0.000     .7662088    .9998127
+       _cons |   -.316173   .1263226    -2.50   0.015    -.5695441    -.062802
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. regress z_add_post_total open pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =     877
+                                                       F(  4,    53) =  108.45
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.4967
+                                                       Root MSE      =  .73854
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_post~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   1.167227   .3636187     3.21   0.002     .4379005    1.896554
+ pre_total_v |   .0804252   .0063528    12.66   0.000     .0676831    .0931673
+ pre_total_w |   .0473755   .0158474     2.99   0.004     .0155896    .0791614
+    pre_writ |   1.766142   .2283179     7.74   0.000     1.308194     2.22409
+       _cons |  -1.755995   .3212961    -5.47   0.000    -2.400434   -1.111557
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. **COL 4;
+. ivreg post_writ (open=treat) pre_math_v pre_math_w pre_writ, cluster(schid);
+
+Instrumental variables (2SLS) regression               Number of obs =    1760
+                                                       F(  4,   108) =  111.99
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.1980
+                                                       Root MSE      =  .44159
+
+                                (Std. Err. adjusted for 109 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+   post_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .3323597   .2225622     1.49   0.138    -.1087972    .7735166
+  pre_math_v |   .0442904   .0041714    10.62   0.000     .0360219    .0525588
+  pre_math_w |   .0053361   .0069791     0.76   0.446    -.0084977    .0191699
+    pre_writ |   .7247413   .0654615    11.07   0.000     .5949854    .8544973
+       _cons |  -.0820593   .1728516    -0.47   0.636    -.4246811    .2605624
+------------------------------------------------------------------------------
+Instrumented:  open
+Instruments:   pre_math_v pre_math_w pre_writ treat
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. ivreg z_add_post_total (open=treat) pre_total_v pre_total_w pre_writ, cluster(schid);
+
+Instrumental variables (2SLS) regression               Number of obs =    1760
+                                                       F(  4,   108) =  121.26
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.4376
+                                                       Root MSE      =  .76865
+
+                                (Std. Err. adjusted for 109 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_post~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        open |   .9698458   .4707054     2.06   0.042      .036826    1.902866
+ pre_total_v |   .0623882   .0107298     5.81   0.000     .0411198    .0836565
+ pre_total_w |   .0739964   .0105862     6.99   0.000     .0530127    .0949802
+    pre_writ |   1.215501   .1785275     6.81   0.000     .8616287    1.569374
+       _cons |  -1.384155   .3887821    -3.56   0.001    -2.154788   -.6135211
+------------------------------------------------------------------------------
+Instrumented:  open
+Instruments:   pre_total_v pre_total_w pre_writ treat
+------------------------------------------------------------------------------
+
+. outreg open using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. replace payment=0 if treat==0;
+(885 real changes made)
+
+. gen treat_pay=treat*payment;
+
+. **COL 3;
+. gen days=pay/50;
+
+. replace days=days/27;
+(884 real changes made)
+
+. regress post_writ days pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =     877
+                                                       F(  4,    53) =   82.61
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.3021
+                                                       Root MSE      =  .40928
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+   post_writ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        days |     .59038   .1982599     2.98   0.004     .1927211    .9880389
+ pre_total_v |   .0376132   .0028904    13.01   0.000     .0318159    .0434105
+ pre_total_w |  -.0065191   .0042955    -1.52   0.135    -.0151347    .0020965
+    pre_writ |   .8924751   .0618059    14.44   0.000     .7685081    1.016442
+       _cons |  -.3364524   .1537924    -2.19   0.033    -.6449209   -.0279838
+------------------------------------------------------------------------------
+
+. outreg days using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. regress z_add_post_total days pre_total_v pre_total_w pre_writ if treat==1, cluster(schid);
+
+Linear regression                                      Number of obs =     877
+                                                       F(  4,    53) =   99.77
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.4845
+                                                       Root MSE      =  .74742
+
+                                 (Std. Err. adjusted for 54 clusters in schid)
+------------------------------------------------------------------------------
+             |               Robust
+z_add_post~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        days |    .979679    .523633     1.87   0.067    -.0705959    2.029954
+ pre_total_v |   .0793373   .0067891    11.69   0.000       .06572    .0929546
+ pre_total_w |   .0473538   .0164899     2.87   0.006     .0142792    .0804284
+    pre_writ |   1.767614   .2365215     7.47   0.000     1.293212    2.242016
+       _cons |  -1.524492   .4441996    -3.43   0.001    -2.415444   -.6335404
+------------------------------------------------------------------------------
+
+. outreg days using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\Table11_post.csv", bdec(2) nocons se 3aster r
+> dec(2) comma bracket append;
+
+. 
+end of do-file
+
+. 
+. 
+end of do-file
+
+
+. exit, clear

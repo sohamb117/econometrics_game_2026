@@ -1,0 +1,338 @@
+Audiovisual Communications Technologies/Technicians.
+Computer and Information Sciences, General.
+Special Education and Teaching.
+Electrical, Electronics and Communications Engineering.
+Mechanical Engineering.
+Family and Consumer Sciences/Human Sciences, General.
+Liberal Arts and Sciences, General Studies and Humanities.
+Biology, General.
+Health and Physical Education/Fitness.
+Psychology, General.
+Criminal Justice and Corrections.
+Social Work.
+Business Administration, Management and Operations.
+Accounting and Related Services.
+Marketing.
+Communication and Media Studies.
+Teacher Education and Professional Development, Specific Levels and Methods.
+Teacher Education and Professional Development, Specific Subject Areas.
+Biomedical/Medical Engineering.
+Civil Engineering.
+English Language and Literature, General.
+Neurobiology and Neurosciences.
+Mathematics.
+Chemistry.
+Anthropology.
+Political Science and Government.
+Sociology.
+Drama/Theatre Arts and Stagecraft.
+Fine and Studio Arts.
+Health Services/Allied Health/Health Sciences, General.
+Health and Medical Administrative Services.
+Public Health.
+Registered Nursing, Nursing Administration, Nursing Research and Clinical Nursing.
+Finance and Financial Management Services.
+Human Resources Management and Services.
+Management Information Systems and Services.
+History.
+Aerospace, Aeronautical and Astronautical Engineering.
+Chemical Engineering.
+Computer Engineering.
+Industrial Engineering.
+Physical Sciences, Other.
+Information Science/Studies.
+Multi/Interdisciplinary Studies, Other.
+Rehabilitation and Therapeutic Professions.
+Natural Resources Conservation and Research.
+Journalism.
+Radio, Television, and Digital Communication.
+Public Relations, Advertising, and Applied Communication.
+Family and Consumer Economics and Related Studies.
+Foods, Nutrition, and Related Services.
+Human Development, Family Studies, and Related Services.
+Apparel and Textiles.
+Multi-/Interdisciplinary Studies, General.
+Geography and Cartography.
+International Relations and National Security Studies.
+Design and Applied Arts.
+Music.
+Communication Disorders Sciences and Services.
+Allied Health Diagnostic, Intervention, and Treatment Professions.
+Business/Managerial Economics.
+Hospitality Administration/Management.
+Management Sciences and Quantitative Methods.
+Education, Other.
+Business, Management, Marketing, and Related Support Services, Other.
+Clinical/Medical Laboratory Science/Research and Allied Professions.
+Agriculture, General.
+Agricultural Business and Management.
+Animal Sciences.
+Plant Sciences.
+Forestry.
+Wildlife and Wildlands Science and Management.
+Architecture.
+Environmental Design.
+Architectural Engineering.
+Biological/Biosystems Engineering.
+Microbiological Sciences and Immunology.
+Physiology, Pathology and Related Sciences.
+Applied Mathematics.
+Nutrition Sciences.
+Geological and Earth Sciences/Geosciences.
+Air Transportation.
+Practical Nursing, Vocational Nursing and Nursing Assistants.
+Legal Support Services.
+Allied Health and Medical Assisting Services.
+Clinical, Counseling and Applied Psychology.
+Business/Commerce, General.
+Dental Support Services and Allied Professions.
+Computer Programming.
+Computer Systems Networking and Telecommunications.
+Computer/Information Technology Administration and Management.
+Quality Control and Safety Technologies/Technicians.
+Engineering Technologies/Technicians, Other.
+Parks, Recreation and Leisure Studies.
+Security Science and Technology.
+Public Administration and Social Service Professions, Other.
+Industrial Production Technologies/Technicians.
+Religion/Religious Studies.
+Religious/Sacred Music.
+Research and Experimental Psychology.
+Arts, Entertainment,and Media Management.
+Ground Transportation.
+Pharmacy, Pharmaceutical Sciences, and Administration.
+Computer Science.
+Linguistic, Comparative, and Related Language Studies and Services.
+Statistics.
+Health/Medical Preparatory Programs.
+American Sign Language.
+Science, Technology and Society.
+Social Sciences, General.
+General Sales, Merchandising and Related Marketing Operations.
+Biological and Physical Sciences.
+Mental and Social Health Services and Allied Professions.
+Homeland Security.
+Veterinary/Animal Health Technologies/Technicians.
+Construction Trades, General.
+Heating, Air Conditioning, Ventilation and Refrigeration Maintenance Technology/Technician (HAC, HACR, HVAC, HVACR).
+Precision Metal Working.
+Business Operations Support and Assistant Services.
+Somatic Bodywork and Related Therapeutic Services.
+Cosmetology and Related Personal Grooming Services.
+Health Aides/Attendants/Orderlies.
+Vehicle Maintenance and Repair Technologies.
+City/Urban, Community and Regional Planning.
+Landscape Architecture.
+Ethnic, Cultural Minority, Gender, and Group Studies.
+Graphic Communications.
+Engineering, General.
+Engineering Science.
+Environmental/Environmental Health Engineering.
+Materials Engineering
+Manufacturing Engineering.
+Construction Engineering Technologies.
+Engineering-Related Fields.
+East Asian Languages, Literatures, and Linguistics.
+Romance Languages, Literatures, and Linguistics.
+Non-Professional General Legal Studies (Undergraduate).
+Rhetoric and Composition/Writing Studies.
+Biochemistry, Biophysics and Molecular Biology.
+International/Global Studies.
+Philosophy.
+Physical Sciences.
+Physics.
+Science Technologies/Technicians, Other.
+Community Organization and Advocacy.
+Public Policy Analysis.
+Economics.
+Visual and Performing Arts, General.
+Dance.
+Film/Video and Photographic Arts.
+Medicine.
+Entrepreneurial and Small Business Operations.
+International Business.
+Agriculture/Veterinary Preparatory Programs.
+Architectural Sciences and Technology.
+Architecture and Related Services, Other.
+Area Studies.
+Computer Software and Media Applications.
+Educational Assessment, Evaluation, and Research.
+Mining and Mineral Engineering.
+Systems Engineering.
+Legal Professions and Studies, Other.
+Cell/Cellular Biology and Anatomical Sciences.
+Astronomy and Astrophysics.
+Public Administration.
+Intelligence, Command Control and Information Operations.
+Military Systems and Maintenance Technology.
+Atmospheric Sciences and Meteorology.
+Literature.
+Religious Education.
+Human Services, General.
+Cultural Studies/Critical Theory and Analysis.
+Criminology.
+Construction Management.
+Electromechanical Instrumentation and Maintenance Technologies/Technicians.
+Environmental Control Technologies/Technicians.
+Energy Systems Technologies/Technicians.
+Electrical and Power Transmission Installers.
+Agricultural Public Services.
+Food Science and Technology.
+Education, General.
+Parks, Recreation and Leisure Facilities Management.
+Heavy/Industrial Equipment Maintenance Technologies.
+Health Professions and Related Clinical Sciences, Other.
+Bible/Biblical Studies.
+Culinary Arts and Related Services.
+Drafting/Design Engineering Technologies/Technicians.
+Ophthalmic and Optometric Support Services and Allied Professions.
+Mechanical Engineering Related Technologies/Technicians.
+Communications Technologies/Technicians and Support Services, Other.
+Intercultural/Multicultural and Diversity Studies.
+Behavioral Sciences.
+Human Computer Interaction.
+Communication, Journalism, and Related Programs, Other.
+Natural Resources Management and Policy.
+Agricultural Engineering.
+Social Sciences, Other.
+Bilingual, Multilingual, and Multicultural Education.
+Dietetics and Clinical Nutrition Services.
+Electrical Engineering Technologies/Technicians.
+Biotechnology.
+Ecology, Evolution, Systematics, and Population Biology.
+Engineering, Other.
+English Language and Literature/Letters, Other.
+Psychology, Other.
+Fire Protection.
+Operations Research.
+Urban Studies/Affairs.
+Interior Architecture.
+Construction Engineering.
+Gerontology.
+Cognitive Science.
+Agricultural Production Operations.
+Genetics.
+Pharmacology and Toxicology.
+Human Biology.
+Social and Philosophical Foundations of Education.
+Sustainability Studies.
+Biomathematics, Bioinformatics, and Computational Biology.
+Mathematics and Computer Science.
+Visual and Performing Arts, Other.
+Marine Transportation.
+Building/Construction Finishing, Management, and Inspection.
+Electrical/Electronics Maintenance and Repair Technology.
+Business/Corporate Communications.
+Specialized Sales, Merchandising and  Marketing Operations.
+Zoology/Animal Biology.
+Pastoral Counseling and Specialized Ministries.
+Alternative and Complementary Medicine and Medical Systems.
+Theological and Ministerial Studies.
+Natural Sciences.
+Real Estate.
+Real Estate Development.
+Funeral Service and Mortuary Science.
+Biochemical Engineering.
+Engineering Physics.
+Metallurgical Engineering.
+Petroleum Engineering.
+Geological/Geophysical Engineering.
+Precision Systems Maintenance and Repair Technologies.
+Agricultural and Domestic Animal Services.
+Soil Sciences.
+Plumbing and Related Water Supply Services.
+Applied Horticulture and Horticultural Business Services.
+Civil Engineering Technologies/Technicians.
+Computer Engineering Technologies/Technicians.
+Architectural Engineering Technologies/Technicians.
+Homeland Security, Law Enforcement, Firefighting and Related Protective Services, Other.
+Leisure and Recreational Activities.
+Educational Administration and Supervision.
+Bioethics/Medical Ethics.
+Peace Studies and Conflict Resolution.
+Missions/Missionary Studies and Missiology.
+Ocean Engineering.
+Physical Science Technologies/Technicians.
+Classics and Classical Languages, Literatures, and Linguistics.
+Legal Research and Advanced Professional Studies.
+Library Science and Administration.
+Insurance.
+Communications Technology/Technician.
+Engineering Technology, General.
+Agriculture, Agriculture Operations, and Related Sciences, Other.
+Carpenters.
+Curriculum and Instruction.
+Nuclear Engineering.
+Foreign Languages, Literatures, and Linguistics, Other.
+Family and Consumer Sciences/Human Sciences Business Services.
+Housing and Human Environments.
+Sociology and Anthropology.
+Teaching English or French as a Second or Foreign Language.
+Data Entry/Microcomputer Applications.
+Biological and Biomedical Sciences, Other.
+Systems Science and Theory.
+Biopsychology.
+Computer and Information Sciences and Support Services, Other.
+Mathematics and Statistics, Other.
+Agricultural Mechanization.
+International Agriculture.
+Botany/Plant Biology.
+Medical Illustration and Informatics.
+Museology/Museum Studies.
+Personal Awareness and Self-Improvement.
+Agricultural and Food Products Processing.
+Educational/Instructional Media Design.
+Mechanic and Repair Technologies/Technicians, Other.
+Nuclear and Industrial Radiologic Technologies/Technicians.
+Architectural History and Criticism.
+Natural Resources and Conservation, Other.
+Computer Systems Analysis.
+Precision Production, Other.
+Teaching Assistants/Aides.
+Personal and Culinary Services, Other.
+Data Processing.
+Mining and Petroleum Technologies/Technicians.
+Marine Sciences.
+Naval Architecture and Marine Engineering.
+Alternative and Complementary Medical Support Services.
+Polymer/Plastics Engineering.
+Biology Technician/Biotechnology Laboratory Technician.
+Electromechanical Engineering.
+Mechatronics, Robotics, and Automation Engineering.
+Crafts/Craft Design, Folk Art and Artisanry.
+Fishing and Fisheries Sciences and Management.
+Germanic Languages, Literatures, and Linguistics.
+Paper Science and Engineering.
+Theology and Religious Vocations, Other.
+Health-Related Knowledge and Skills.
+Ceramic Sciences and Engineering.
+Dispute Resolution.
+Parks, Recreation, Leisure, and Fitness Studies, Other.
+Classical and Ancient Studies.
+Military Technologies and Applied Sciences, Other.
+Veterinary Biomedical and Clinical Sciences.
+Construction Trades, Other.
+Nuclear Engineering Technologies/Technicians.
+Science Technologies/Technicians, General.
+International and Comparative Education.
+Textile Sciences and Engineering.
+Medical Clinical Sciences/Graduate Medical Studies.
+Forest Engineering.
+Computational Science.
+Publishing.
+Woodworking.
+Historic Preservation and Conservation.
+Basic Skills and Developmental/Remedial Education.
+Maritime Studies.
+Movement and Mind-Body Therapies and Education.
+Slavic, Baltic and Albanian Languages, Literatures, and Linguistics.
+Middle/Near Eastern and Semitic Languages, Literatures, and Linguistics.
+Mechanics and Repairers, General.
+Family and Consumer Sciences/Human Sciences, Other.
+Philosophy and Religious Studies, Other.
+Engineering Mechanics.
+Energy and Biologically Based Therapies.
+Archeology.
+Military Science and Operational Studies.
+Telecommunications Management.
+Materials Sciences.

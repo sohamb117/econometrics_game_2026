@@ -1,0 +1,8 @@
+,(1),(2),(3),(4)
+,post_writ,,,
+treat,0.06,0.18,0.14,0.15
+,[0.04],[0.13],[0.08]*,[0.09]*
+Observations,1624,1624,1624,1624
+R-squared,0.19,0.32,0.40,0.45
+Robust standard errors in brackets,,,,
+* significant at 10%; ** significant at 5%; *** significant at 1%,,,,

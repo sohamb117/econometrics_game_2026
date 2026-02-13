@@ -1,0 +1,466 @@
+--------------------------------------------------------------------------------------------------------------------
+       log:  C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table1Figure1.log
+  log type:  text
+ opened on:   1 Jun 2011, 14:13:29
+
+. set more off;
+
+. set mem 300m;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          300M    max. data space                300.000M
+    set matsize         400     max. RHS vars in models          1.254M
+                                                            -----------
+                                                               303.163M
+
+. set matsize 150;
+
+Current memory allocation
+
+                    current                                 memory usage
+    settable          value     description                 (1M = 1024k)
+    --------------------------------------------------------------------
+    set maxvar         5000     max. variables allowed           1.909M
+    set memory          300M    max. data space                300.000M
+    set matsize         150     max. RHS vars in models          0.184M
+                                                            -----------
+                                                               302.093M
+
+. cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\";
+C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance
+
+. use "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\randomcheck.dta";
+
+. **************************************************************************************************;
+. **CREATING DATA FOR CHARTS;
+. **************************************************************************************************;
+. **ALL SCHOOLS;
+. **QUICKLY RECODING DATES;
+. gen time=1 if month==8 & year==2003;
+(3066 missing values generated)
+
+. replace time=2 if month==9 & year==2003;
+(98 real changes made)
+
+. replace time=3 if month==10 & year==2003;
+(95 real changes made)
+
+. replace time=4 if month==11 & year==2003;
+(147 real changes made)
+
+. replace time=5 if month==12 & year==2003;
+(110 real changes made)
+
+. replace time=6 if month==1 & year==2004;
+(111 real changes made)
+
+. replace time=7 if month==2 & year==2004;
+(111 real changes made)
+
+. replace time=8 if month==3 & year==2004;
+(112 real changes made)
+
+. replace time=9 if month==4 & year==2004;
+(107 real changes made)
+
+. replace time=10 if month==5 & year==2004;
+(104 real changes made)
+
+. replace time=11 if month==6 & year==2004;
+(104 real changes made)
+
+. replace time=12 if month==7 & year==2004;
+(106 real changes made)
+
+. replace time=13 if month==8 & year==2004;
+(91 real changes made)
+
+. replace time=14 if month==9 & year==2004;
+(99 real changes made)
+
+. replace time=15 if month==10 & year==2004;
+(96 real changes made)
+
+. replace time=16 if month==11 & year==2004;
+(87 real changes made)
+
+. replace time=17 if month==12 & year==2004;
+(131 real changes made)
+
+. replace time=18 if month==1 & year==2005;
+(104 real changes made)
+
+. replace time=19 if month==2 & year==2005;
+(104 real changes made)
+
+. replace time=20 if month==3 & year==2005;
+(103 real changes made)
+
+. replace time=21 if month==4 & year==2005;
+(104 real changes made)
+
+. replace time=22 if month==5 & year==2005;
+(107 real changes made)
+
+. replace time=23 if month==6 & year==2005;
+(99 real changes made)
+
+. replace time=24 if month==7 & year==2005;
+(100 real changes made)
+
+. replace time=25 if month==8 & year==2005;
+(96 real changes made)
+
+. replace time=26 if month==9 & year==2005;
+(98 real changes made)
+
+. replace time=27 if month==10 & year==2005;
+(97 real changes made)
+
+. replace time=28 if month==11 & year==2005;
+(84 real changes made)
+
+. replace time=29 if month==12 & year==2005;
+(98 real changes made)
+
+. replace time=30 if month==1 & year==2006;
+(94 real changes made)
+
+. replace time=31 if month==2 & year==2006;
+(67 real changes made)
+
+. **ALLOCATING AUGUST 25th schools to September;
+. replace time=2 if month==8 & day>24;
+(104 real changes made)
+
+. drop if schid==1111;
+(1 observation deleted)
+
+. drop if schid==1211;
+(1 observation deleted)
+
+. drop if schid==2493;
+(24 observations deleted)
+
+. drop if schid==5221;
+(2 observations deleted)
+
+. drop if schid==5231;
+(1 observation deleted)
+
+. drop if schid==5332;
+(2 observations deleted)
+
+. drop if schid==5711;
+(1 observation deleted)
+
+. gen RC=1;
+
+. sort schid;
+
+. save randomcheck_CODED, replace;
+file randomcheck_CODED.dta saved
+
+. **************************************************************************************************************;
+. **TABLE 1;
+. sort treat;
+
+. **PANEL A COL 1 COL 2;
+. by treat: sum open if time==1;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |        39    .6410256    .4859705          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+        open |        41    .6585366    .4800915          0          1
+
+
+. **PANEL B AND D COL 1 COL 2;
+. by treat: sum students inside bbused interact_kids if time==1 & open==1;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    students |        25       15.92     7.84708          0         34
+      inside |        25    .8353879     .326539          0          1
+      bbused |        19    .8947368    .3153018          0          1
+interact_k~s |        25         .72    .4582576          0          1
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    students |        27     17.7037    8.760992          0         33
+      inside |        27    .8349647    .3582217          0          1
+      bbused |        20         .85    .3663475          0          1
+interact_k~s |        27    .7777778    .4236593          0          1
+
+
+. **PANEL A COL 3;
+. regress open treat if time==1;
+
+      Source |       SS       df       MS              Number of obs =      80
+-------------+------------------------------           F(  1,    78) =    0.03
+       Model |  .006128831     1  .006128831           Prob > F      =  0.8716
+    Residual |  18.1938712    78  .233254759           R-squared     =  0.0003
+-------------+------------------------------           Adj R-squared = -0.0125
+       Total |        18.2    79  .230379747           Root MSE      =  .48296
+
+------------------------------------------------------------------------------
+        open |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0175109   .1080279     0.16   0.872    -.1975561     .232578
+       _cons |   .6410256   .0773362     8.29   0.000      .487061    .7949902
+------------------------------------------------------------------------------
+
+. **PANEL B AND D COL 3;
+. regress students treat if time==1 & open==1;
+
+      Source |       SS       df       MS              Number of obs =      52
+-------------+------------------------------           F(  1,    50) =    0.59
+       Model |  41.2996011     1  41.2996011           Prob > F      =  0.4443
+    Residual |  3473.46963    50  69.4693926           R-squared     =  0.0118
+-------------+------------------------------           Adj R-squared = -0.0080
+       Total |  3514.76923    51  68.9170437           Root MSE      =  8.3348
+
+------------------------------------------------------------------------------
+    students |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   1.783704   2.313378     0.77   0.444    -2.862852    6.430259
+       _cons |      15.92   1.666966     9.55   0.000      12.5718     19.2682
+------------------------------------------------------------------------------
+
+. regress inside treat if time==1 & open==1;
+
+      Source |       SS       df       MS              Number of obs =      52
+-------------+------------------------------           F(  1,    50) =    0.00
+       Model |  2.3241e-06     1  2.3241e-06           Prob > F      =  0.9965
+    Residual |  5.89545685    50  .117909137           R-squared     =  0.0000
+-------------+------------------------------           Adj R-squared = -0.0200
+       Total |  5.89545918    51  .115597239           Root MSE      =  .34338
+
+------------------------------------------------------------------------------
+      inside |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.0004231   .0953067    -0.00   0.996    -.1918523     .191006
+       _cons |   .8353879   .0686758    12.16   0.000     .6974485    .9733273
+------------------------------------------------------------------------------
+
+. regress bbused treat if time==1 & open==1;
+
+      Source |       SS       df       MS              Number of obs =      39
+-------------+------------------------------           F(  1,    37) =    0.17
+       Model |  .019500675     1  .019500675           Prob > F      =  0.6858
+    Residual |  4.33947368    37  .117283073           R-squared     =  0.0045
+-------------+------------------------------           Adj R-squared = -0.0224
+       Total |  4.35897436    38  .114709852           Root MSE      =  .34247
+
+------------------------------------------------------------------------------
+      bbused |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |  -.0447368    .109713    -0.41   0.686    -.2670365    .1775629
+       _cons |   .8947368   .0785671    11.39   0.000     .7355447    1.053929
+------------------------------------------------------------------------------
+
+. regress interact_kids treat if time==1 & open==1;
+
+      Source |       SS       df       MS              Number of obs =      52
+-------------+------------------------------           F(  1,    50) =    0.22
+       Model |  .043333333     1  .043333333           Prob > F      =  0.6387
+    Residual |  9.70666667    50  .194133333           R-squared     =  0.0044
+-------------+------------------------------           Adj R-squared = -0.0155
+       Total |        9.75    51  .191176471           Root MSE      =  .44061
+
+------------------------------------------------------------------------------
+interact_k~s |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |   .0577778   .1222925     0.47   0.639    -.1878539    .3034095
+       _cons |        .72   .0881211     8.17   0.000     .5430035    .8969965
+------------------------------------------------------------------------------
+
+. ************************************************************************************************************;
+. **Figure 1:  RANDOM CHECKS GRAPH;
+. sort time treat;
+
+. preserve;
+
+. keep if treat==0;
+(1616 observations deleted)
+
+. tabstat open, by(time) stats(mean) columns(statistics);
+
+Summary for variables: open
+     by categories of: time 
+
+    time |      mean
+---------+----------
+       1 |  .6410256
+       2 |  .5533981
+       3 |       .46
+       4 |  .7777778
+       5 |  .7777778
+       6 |  .6851852
+       7 |  .7222222
+       8 |  .4545455
+       9 |  .5961538
+      10 |  .5490196
+      11 |  .4150943
+      12 |  .7843137
+      13 |  .6315789
+      14 |  .7272727
+      15 |  .7916667
+      16 |  .6944444
+      17 |    .53125
+      18 |       .54
+      19 |  .6734694
+      20 |       .44
+      21 |  .6078431
+      22 |       .36
+      23 |  .4166667
+      24 |  .5833333
+      25 |  .3793103
+      26 |  .5319149
+      27 |  .5744681
+      28 |  .4651163
+      29 |  .5581395
+      30 |  .5217391
+      31 |  .4571429
+---------+----------
+   Total |  .5811075
+--------------------
+
+. restore;
+
+. preserve;
+
+. keep if treat==1;
+(1535 observations deleted)
+
+. tabstat open, by(time) stats(mean) columns(statistics);
+
+Summary for variables: open
+     by categories of: time 
+
+    time |      mean
+---------+----------
+       1 |  .6585366
+       2 |  .7916667
+       3 |  .7111111
+       4 |  .8666667
+       5 |      .875
+       6 |  .8928571
+       7 |  .8928571
+       8 |       .75
+       9 |  .8518519
+      10 |  .7735849
+      11 |  .6530612
+      12 |  .8888889
+      13 |     .8125
+      14 |  .8113208
+      15 |  .8723404
+      16 |  .8235294
+      17 |  .8461538
+      18 |  .8113208
+      19 |  .8518519
+      20 |  .7692308
+      21 |  .8461538
+      22 |  .6428571
+      23 |       .64
+      24 |  .7058824
+      25 |  .7297297
+      26 |       .66
+      27 |  .7142857
+      28 |       .75
+      29 |  .7777778
+      30 |  .6808511
+      31 |    .78125
+---------+----------
+   Total |  .7834158
+--------------------
+
+. restore;
+
+. clear;
+
+. ************************************************************************************************************;
+. **PANEL C:  TEACHER QUALIFICATIONS;
+. use "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\Teacher_test.dta";
+
+. gen score=comp1+comp2+comp3+clozet+story+attitude+nnc1+nc1+nc2+nnc2+nnc3+nc3+vp+map;
+
+. keep schid score;
+
+. sort schid;
+
+. merge schid using randomcheck_coded;
+variable schid does not uniquely identify observations in randomcheck_coded.dta
+
+. keep if RC==1;
+(2 observations deleted)
+
+. sort schid;
+
+. collapse (max) score, by(schid treat);
+
+. **PANEL C COL 1 COL 2;
+. bys treat: sum score;
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 0
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       score |        54     33.5463    10.42958         11         55
+
+--------------------------------------------------------------------------------------------------------------------
+-> treat = 1
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       score |        53    34.99057    10.54637          3         53
+
+
+. **PANEL C COL 3;
+. regress score treat;
+
+      Source |       SS       df       MS              Number of obs =     107
+-------------+------------------------------           F(  1,   105) =    0.51
+       Model |  55.7933549     1  55.7933549           Prob > F      =  0.4779
+    Residual |  11548.8795   105  109.989329           R-squared     =  0.0048
+-------------+------------------------------           Adj R-squared = -0.0047
+       Total |  11604.6729   106  109.478046           Root MSE      =  10.488
+
+------------------------------------------------------------------------------
+       score |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       treat |    1.44427   2.027834     0.71   0.478     -2.57655     5.46509
+       _cons |    33.5463   1.427179    23.51   0.000     30.71646    36.37613
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "C:\Incentives_Matter_Data\Incentives_FINAL\Programs\Table 1 Panel E.do"
+
+. *SETTING ENVIRONMENT;
+. clear
+
+. #delimit;
+delimiter now ;
+. capture log close;

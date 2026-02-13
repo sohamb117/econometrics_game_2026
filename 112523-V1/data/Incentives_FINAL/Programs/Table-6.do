@@ -1,0 +1,126 @@
+*SETTING ENVIRONMENT;
+#delimit;
+clear;
+capture log close;
+
+log using "C:\Incentives_Matter_Data\Incentives_FINAL\Log Files\Table6.log", replace;
+
+set more off;
+set mem 300m;
+set matsize 150;
+
+cd "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\";
+use "C:\Incentives_Matter_Data\Incentives_FINAL\Raw Data\RandomCheck\Teacher Attendance\randomcheck.dta";
+
+**************************************************************************************************;
+**CREATING DATA FOR CHARTS;
+**************************************************************************************************;
+**ALL SCHOOLS;
+**QUICKLY RECODING DATES;
+gen time=1 if month==8 & year==2003;
+replace time=2 if month==9 & year==2003;
+replace time=3 if month==10 & year==2003;
+replace time=4 if month==11 & year==2003;
+replace time=5 if month==12 & year==2003;
+replace time=6 if month==1 & year==2004;
+replace time=7 if month==2 & year==2004;
+replace time=8 if month==3 & year==2004;
+replace time=9 if month==4 & year==2004;
+replace time=10 if month==5 & year==2004;
+replace time=11 if month==6 & year==2004;
+replace time=12 if month==7 & year==2004;
+replace time=13 if month==8 & year==2004;
+replace time=14 if month==9 & year==2004;
+replace time=15 if month==10 & year==2004;
+replace time=16 if month==11 & year==2004;
+replace time=17 if month==12 & year==2004;
+replace time=18 if month==1 & year==2005;
+replace time=19 if month==2 & year==2005;
+replace time=20 if month==3 & year==2005;
+replace time=21 if month==4 & year==2005;
+replace time=22 if month==5 & year==2005;
+replace time=23 if month==6 & year==2005;
+replace time=24 if month==7 & year==2005;
+replace time=25 if month==8 & year==2005;
+replace time=26 if month==9 & year==2005;
+replace time=27 if month==10 & year==2005;
+replace time=28 if month==11 & year==2005;
+replace time=29 if month==12 & year==2005;
+replace time=30 if month==1 & year==2006;
+replace time=31 if month==2 & year==2006;
+
+**ALLOCATING AUGUST 25th schools to September;
+replace time=2 if month==8 & day>24;
+
+drop if schid==1111;
+drop if schid==1211;
+drop if schid==2493;
+drop if schid==5221;
+drop if schid==5231;
+drop if schid==5332;
+drop if schid==5711;
+
+gen RC=1;
+sort schid;
+save randomcheck_CODED, replace;
+
+drop if time==1;
+keep if open==1;
+
+**************************************************************************************************************;
+sum inside if treat==0;
+sum inside if treat==1;
+
+regress inside treat, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket replace;
+
+regress inside treat if time<9, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress inside treat if time>8 & time<16, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress inside treat if time>15, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+**************************************************************************************************************;
+sum interact_kids if treat==0;
+sum interact_kids if treat==1;
+
+regress interact_kids treat, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress interact_kids treat if time<9, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress interact_kids treat if time>8 & time<16, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress interact_kids treat if time>15, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+**************************************************************************************************************;
+sum bbused if treat==0;
+sum bbused if treat==1;
+
+regress bbused treat, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress bbused treat if time<9, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress bbused treat if time>8 & time<16, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+regress bbused treat if time>15, cluster(schid);
+outreg treat using "C:\Incentives_Matter_Data\Incentives_FINAL\Output\table6.csv", bdec(2) se 3aster rdec(2) comma bracket append;
+
+
+
+
+
+
+
+
+
+  
